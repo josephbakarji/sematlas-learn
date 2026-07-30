@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradient Descent</title>
+    <link rel="stylesheet" href="../../framework/vendor/reset.css">
+    <link rel="stylesheet" href="../../framework/vendor/reveal.css">
+    <link rel="stylesheet" href="../../framework/vendor/night.css">
+    <link rel="stylesheet" href="../../framework/vendor/monokai.css">
+    <link rel="stylesheet" href="../../framework/vendor/katex/katex.min.css">
+    <link rel="stylesheet" href="../../framework/vendor/fonts/fonts.css">
+    <link rel="stylesheet" href="../../framework/css/sal.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<!-- SECTIONS START -->
+<section>
+    <p class="kicker">Undergraduate Students</p>
+    <h1>Gradient Descent: From Basics to Optimization</h1>
+    <p class="t-line">Learn the fundamental algorithm for finding local minima in functions.</p>
+</section>
+
+<section>
+    <h2>What is Gradient Descent?</h2>
+    <div class="cardtitle">The Concept</div>
+    <div class="card">
+        <ul class="pts">
+            <li>Gradient descent is an optimization algorithm used to minimize loss functions in machine learning.</li>
+            <li>It involves iteratively updating model parameters to reduce the cost function, often using the gradient (or derivative) of the loss with respect to each parameter.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Why Use Gradient Descent?</h2>
+    <div class="cardtitle">Advantages</div>
+    <div class="card">
+        <ul class="pts">
+            <li>Simple to implement and understand, making it suitable for beginners.</li>
+            <li>Effective in minimizing convex loss functions, ensuring convergence to a global minimum.</li>
+            <li>Can be adapted to handle complex problems through modifications like stochastic gradient descent (SGD).</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>How Gradient Descent Works</h2>
+    <div class="cardtitle">The Process</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The algorithm starts with an initial guess for the parameters.</li>
+            <li>In each iteration:</li>
+                <ol>
+                    <li>Calculate the gradient of the loss function with respect to the current parameter values.</li>
+                    <li>Update the parameters by moving them in the opposite direction of the gradient, scaled by a learning rate (η).</li>
+                    <li>Repeat until convergence or a maximum number of iterations is reached.</li>
+                </ol>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Loss Functions and Gradients</h2>
+    <p class="t-line">Understanding the math behind gradient descent.</p>
+    <div class="duo">
+        <div style="width: 48%;">
+            <div class="eqbox hero">
+                $$L(w) = \frac{1}{N} \sum_{i=1}^{N}(y_i - (w x_i + b))^2$$
+            </div>
+            <ul class="pts fragment">
+                <li>Here, \(L\) is the loss function, \(N\) is the number of data points.</li>
+                <li>The goal is to minimize \(L(w)\).</li>
+            </ul>
+        </div>
+        <div style="width: 48%;">
+            <h3 class="fragment">Gradient Calculation</h3>
+            <div class="eqbox fragment">
+                $$\nabla L = \frac{2}{N} \sum_{i=1}^{N}(y_i - (w x_i + b))(-x_i)$$
+            </div>
+            <ul class="pts fragment">
+                <li>Calculate the gradient by differentiating \(L(w)\) with respect to each parameter.</li>
+                <li>\(\nabla L\) represents how the loss changes as \(w\) or \(b\) changes.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Learning Rate and Convergence</h2>
+    <div class="cardtitle">Control Parameters</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The learning rate (\(\eta\)) determines the size of steps taken in each iteration.</li>
+            <li>A small learning rate results in slow convergence but avoids overshooting.</li>
+            <li>A large learning rate may cause the algorithm to diverge quickly or oscillate around the minimum.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Why Minimize Loss?</h2>
+    <p class="t-line">The goal of optimization in machine learning.</p>
+    <div class="cardtitle">Objective</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The primary objective is to minimize the loss function \(L(w)\).</li>
+            <li>A good model minimizes \(L(w)\) efficiently and accurately represents the data.</li>
+            <li>Minimization helps in making accurate predictions and decisions based on the model.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Closing Thoughts</h2>
+    <p class="cap">Gradient Descent is a powerful optimization technique that forms the foundation of many machine learning models. By understanding its principles, you can effectively apply it to solve various problems.</p>
+</section>
+
+<section>
+    <h2>Check Yourself</h2>
+    <div class="quiz" data-quiz='{
+        "question": "Which term makes the loss convex in \\(w\\)?",
+        "choices": {"A": "\\(y_i - (w x_i + b)\\)", "B": "-x_i", "C": "N", "D": "η"},
+        "correct": "B",
+        "explanation": "The gradient is a linear function of \\(w\\), making the loss convex.",
+        "hint": "Consider how the loss changes with small changes in \\(w\\)."
+    }'></div>
+</section>
+<!-- SECTIONS END -->
+</div>
+</div>
+<script src="../../framework/vendor/reveal.js"></script>
+<script src="../../framework/vendor/highlight.js"></script>
+<script src="../../framework/vendor/katex/katex.min.js"></script>
+<script src="../../framework/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../framework/js/quiz.js"></script>
+<script src="../../framework/js/net-diagram.js"></script>
+<script src="../../framework/js/sal.js"></script>
+<script>SAL.init();</script>
+</body>
+</html>

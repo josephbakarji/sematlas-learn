@@ -71,7 +71,25 @@ def extract_sections(text):
     text = re.sub(r'^```[a-zA-Z]*\s*', '', text.strip())
     text = re.sub(r'```\s*$', '', text.strip())
     sections = re.findall(r'<section\b.*?</section>', text, flags=re.S)
-    return sections
+    return sections, False
+
+
+def salvage_sections(text):
+    """Small models often emit the right vocabulary in the wrong framing:
+    markdown headings and --- separators instead of <section> wrappers.
+    The scaffolding meets the model halfway: split, clean, wrap."""
+    text = re.sub(r'^```[a-zA-Z]*\s*', '', text.strip())
+    text = re.sub(r'```\s*$', '', text.strip())
+    chunks = re.split(r'\n\s*---+\s*\n', text)
+    secs = []
+    for c in chunks:
+        c = re.sub(r'^#{1,6} .*$', '', c, flags=re.M)          # drop md headings
+        c = re.sub(r'^\*\*[^*]+\*\*\s*$', '', c, flags=re.M)  # drop bold-line headings
+        c = re.sub(r'^Kicker:\s*(.+)$', r'<p class="kicker">\1</p>', c, flags=re.M)
+        c = c.strip()
+        if c and '<' in c:
+            secs.append('<section>\n' + c + '\n</section>')
+    return secs
 
 
 def main():
@@ -96,7 +114,9 @@ def main():
         f'Write a deck of about {args.slides} sections teaching: {args.topic}\n'
         f'Audience: {args.audience}\n'
         'Remember: output only the <section> blocks, first one is the title '
-        'slide, last one is a quiz.'
+        'slide, last one is a quiz. Start your reply with "<section>" as the '
+        'very first characters, and wrap every slide in <section>...</section>. '
+        'Do not use markdown headings or --- separators.'
     )
 
     print(f'model: {args.model} @ {args.base_url}')
@@ -109,7 +129,10 @@ def main():
         sys.exit(f'LLM call failed: {e}\n'
                  'Is the server running? For Ollama: `ollama serve` then `ollama pull <model>`.')
 
-    sections = extract_sections(raw)
+    sections, salvaged = extract_sections(raw)
+    if not sections:
+        sections = salvage_sections(raw)
+        salvaged = bool(sections)
     slug = slugify(args.topic) + (('-' + args.suffix) if args.suffix else '')
     out_dir = Path(args.out) if args.out else ROOT / 'decks' / slug
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -128,6 +151,7 @@ def main():
         'slides_requested': args.slides, 'sections_produced': len(sections),
         'audience': args.audience, 'temperature': args.temperature,
         'generation_seconds': round(dt, 1), 'usage': usage,
+        'salvaged': salvaged,
     }
     (out_dir / 'meta.json').write_text(json.dumps(meta, indent=1))
 

@@ -28,3 +28,4 @@ the grammar improves. Log results below.
 
 | date | model | topic | sections | time | score | notes |
 |---|---|---|---|---|---|---|
+| 2026-07-30 | qwen2.5-coder:3b (1.9GB) | gradient descent | 9 | 14.5s | 7/10 | Run 1 failed framing (md headings, no sections): fixed with a prompt nudge plus adapter salvage mode. Run 2 clean: renders 2/2, grammar 2/2, pedagogy 1/2 (generic content, eta defined inline), interactivity 1/2 (working quiz but it parroted the example question from the system prompt; some choices in plain text not KaTeX), taste 1/2. Grammar TODO: replace the quiz example with a copy-resistant one; reinforce the define-every-symbol rule. |
