@@ -1,0 +1,910 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification &amp; Logistic Regression</title>
+    <link rel="stylesheet" href="../../framework/vendor/reset.css">
+    <link rel="stylesheet" href="../../framework/vendor/reveal.css">
+    <link rel="stylesheet" href="../../framework/vendor/night.css">
+    <link rel="stylesheet" href="../../framework/vendor/monokai.css">
+    <link rel="stylesheet" href="../../framework/vendor/katex/katex.min.css">
+    <link rel="stylesheet" href="../../framework/vendor/fonts/fonts.css">
+    <style>
+        :root {
+            --bg-deep: #0d1017;
+            --accent-blue: #61afef; --accent-green: #98c379; --accent-yellow: #e5c07b;
+            --accent-red: #e06c75; --accent-purple: #c678dd; --accent-cyan: #56b6c2;
+            --accent-orange: #d19a66; --ink-muted: #8a919e; --ink-faint: #4a5261;
+        }
+        .reveal-viewport { background: var(--bg-deep); }
+        .reveal { font-size: 30px; font-family: 'DM Sans', -apple-system, sans-serif; }
+        .reveal h1, .reveal h2, .reveal h3 {
+            font-family: 'Newsreader', Georgia, serif; text-transform: none; font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+        .reveal h1 { font-size: 1.7em; }
+        .reveal h2 { font-size: 1.25em; color: var(--accent-blue); margin-bottom: 0.6em; }
+        .reveal h3 { font-size: 1.0em; color: var(--accent-purple); }
+        .reveal .slides section { text-align: left; }
+        .reveal .slides section.centered { text-align: center; }
+        .small-text { font-size: 0.72em; }
+        .tiny-text { font-size: 0.58em; }
+        .muted { color: var(--ink-muted); }
+        .keyword { color: var(--accent-blue); font-weight: 600; }
+
+        .box-b { position: relative; border: 1px solid rgba(97,175,239,0.32); border-radius: 10px;
+                 padding: 0.72em 0.9em 0.52em; margin: 0.85em 0 0.4em; background: transparent; }
+        .box-b > .tab { position: absolute; top: -0.7em; left: 16px; background: var(--bg-deep);
+                 padding: 0 9px; font-family: 'JetBrains Mono', monospace; font-size: 0.5em;
+                 font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+                 color: var(--accent-blue); white-space: nowrap; }
+        .box-b.green  { border-color: rgba(152,195,121,0.32); } .box-b.green > .tab  { color: var(--accent-green); }
+        .box-b.red    { border-color: rgba(224,108,117,0.32); } .box-b.red > .tab    { color: var(--accent-red); }
+        .box-b.yellow { border-color: rgba(229,192,123,0.32); } .box-b.yellow > .tab { color: var(--accent-yellow); }
+
+        .key-k1 { position: relative; border: 1px solid rgba(152,195,121,0.45); border-radius: 12px;
+                  padding: 0.8em 1.1em 0.6em; margin: 1em auto 0.4em; text-align: center;
+                  box-shadow: 0 0 22px rgba(152,195,121,0.08) inset, 0 0 14px rgba(152,195,121,0.06); }
+        .key-k1 > .tab { position: absolute; top: -0.72em; left: 50%; transform: translateX(-50%);
+                  background: var(--bg-deep); padding: 0 11px; font-family: 'JetBrains Mono', monospace;
+                  font-size: 0.5em; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+                  color: var(--accent-green); white-space: nowrap; }
+        .key-k2 { background: #6e2a33; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+                  padding: 0.55em 1em; text-align: center; margin: 0.55em auto;
+                  box-shadow: 0 6px 22px rgba(0,0,0,0.5); }
+        .key-k2.blue { background: #274768; }
+
+        .box-c { border-radius: 10px; overflow: hidden; margin: 0.3em 0;
+                 background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); }
+        .box-c > .hdr { background: rgba(97,175,239,0.13); color: #cfdcf2; font-weight: 600;
+                 font-size: 0.62em; letter-spacing: 1.2px; text-transform: uppercase; padding: 0.42em 1em; }
+        .box-c > .bod { padding: 0.5em 0.85em 0.6em; }
+        .box-c.green  > .hdr { background: rgba(152,195,121,0.13); color: #d3e4c4; }
+        .box-c.red    > .hdr { background: rgba(224,108,117,0.13); color: #f0cdd1; }
+        .box-c.yellow > .hdr { background: rgba(229,192,123,0.13); color: #efe0c2; }
+        .box-c ul { display: block; margin: 0 0 0 1em; }
+
+        .aside-rule { border-left: 2px solid var(--ink-faint); padding-left: 0.85em;
+                      color: #9aa3b2; font-style: italic; margin: 0.5em 0; }
+        .eq-box { border: 1px solid rgba(219,228,245,0.18); border-radius: 12px;
+                  padding: 0.45em 0.8em; text-align: center; margin: 0.5em auto; }
+        .two-column { display: flex; gap: 26px; align-items: flex-start; }
+        .two-column > div { flex: 1; min-width: 0; }
+
+        .viz-wrap { text-align: center; }
+        .viz-wrap svg { background: rgba(255,255,255,0.03); border-radius: 12px; }
+        .axis text { fill: #9aa3b2; font-size: 15px; }
+        .axis path, .axis line { stroke: #4a5261; }
+        .axis-label { fill: #cfd6e4; font-size: 17px; font-weight: 600; }
+        .viz-controls { display: flex; gap: 22px; justify-content: center; align-items: center;
+                    margin-top: 8px; font-size: 0.55em; color: #cfd6e4; flex-wrap: wrap; }
+        .viz-controls label { display: flex; align-items: center; gap: 8px; }
+        .viz-controls input[type=range] { width: 150px; accent-color: var(--accent-blue); }
+        .viz-controls .val { font-family: 'JetBrains Mono', monospace; color: var(--accent-yellow);
+                         min-width: 3.2em; display: inline-block; }
+        .btn { background: rgba(97,175,239,0.15); color: #dbe4f5; border: 1px solid rgba(97,175,239,0.4);
+               border-radius: 8px; padding: 4px 14px; font-size: 1em; cursor: pointer; text-decoration: none; }
+        .btn:hover { background: rgba(97,175,239,0.3); }
+        .btn.active { background: rgba(152,195,121,0.25); border-color: var(--accent-green); }
+
+        .recipe { display: flex; gap: 14px; justify-content: center; margin: 0.7em 0; }
+        .recipe .step { flex: 1; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+                        padding: 0.5em 0.6em; text-align: center; font-size: 0.6em; }
+        .recipe .step .n { font-family: 'JetBrains Mono', monospace; color: var(--accent-orange);
+                           font-size: 0.8em; display: block; margin-bottom: 0.2em; }
+        .recipe .step.done { border-color: rgba(152,195,121,0.5); }
+        .recipe .step.open { border-color: rgba(229,192,123,0.6); }
+
+        .cm { border-collapse: collapse; margin: 0 auto; font-size: 0.6em; }
+        .cm td, .cm th { border: 1px solid #3a4250; padding: 8px 16px; text-align: center;
+                          font-family: 'JetBrains Mono', monospace; }
+        .cm th { color: var(--ink-muted); font-family: 'DM Sans', sans-serif; }
+        .cm .tp { color: var(--accent-green); } .cm .tn { color: var(--accent-cyan); }
+        .cm .fp { color: var(--accent-yellow); } .cm .fn { color: var(--accent-red); }
+
+        .reveal pre { width: 88%; margin: 0.5em auto; font-size: 0.62em; line-height: 1.42;
+                      font-family: 'JetBrains Mono', Menlo, monospace;
+                      box-shadow: 0 8px 26px rgba(0,0,0,0.45); }
+        .reveal pre code { border-radius: 10px; padding: 18px 22px; max-height: 560px;
+                           font-family: 'JetBrains Mono', Menlo, monospace; }
+        .link-chips { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin: 0.8em 0; }
+        .link-chips a { font-size: 0.62em; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- 0 ============ TITLE ============ -->
+<section class="centered">
+    <p class="tiny-text muted" style="letter-spacing: 2px; text-transform: uppercase;">Introduction to Machine Learning</p>
+    <h1>Classification &amp;<br><span style="color: var(--accent-blue);">Logistic Regression</span></h1>
+    <p class="small-text muted" style="margin-top: 1.6em;">From predicting numbers to predicting labels</p>
+</section>
+
+<!-- 1 ============ WHAT IF Y IS A LABEL ============ -->
+<section>
+    <h2>What If the Output Is a Label?</h2>
+    <p class="small-text">Last lectures: predict a <em>number</em> (price). Today: predict a <em>category</em>.
+        A clinic measures tumor size and records the diagnosis:</p>
+    <div class="viz-wrap"><svg id="viz-labels" width="720" height="290"></svg></div>
+    <div class="fragment box-b small-text" style="margin-top: 0.8em;"><span class="tab">Binary classification</span>
+        The target is \(y \in \{0, 1\}\): benign or malignant, spam or not, fraud or not.
+        We want \(P(y = 1)\) as a function of \(x\).
+    </div>
+</section>
+
+<!-- 2 ============ LINEAR REGRESSION FAILS ============ -->
+<section>
+    <h2>Can We Just Fit a Line?</h2>
+    <div class="viz-wrap"><svg id="viz-lrfail" width="720" height="320"></svg></div>
+    <div class="viz-controls">
+        <button class="btn" id="lf-outlier" onclick="LF.toggleOutlier()">Add one obvious malignant case, far right</button>
+        <button class="btn" id="lf-sig" onclick="LF.toggleSigmoid()">Show the sigmoid fit</button>
+    </div>
+    <p class="tiny-text muted" style="text-align:center; margin-top: 4px;">
+        The line predicts values below 0 and above 1, and one far-away, already-obvious case
+        drags it (dashed: before). The sigmoid stays sensible: a correctly classified point
+        contributes almost no gradient.
+    </p>
+</section>
+
+<!-- 3 ============ SIGMOID ============ -->
+<section>
+    <h2>The Sigmoid Function</h2>
+    <div class="two-column">
+        <div class="small-text">
+            <div class="key-k2" style="max-width: 96%;">\( \sigma(z) = \dfrac{1}{1 + e^{-z}} \)</div>
+            <div class="box-b fragment" style="margin-top: 0.9em;"><span class="tab">Squashing</span>
+                Any real number becomes a value in \((0, 1)\): readable as a probability.
+            </div>
+            <div class="box-b green fragment"><span class="tab">Self-derivative</span>
+                \( \sigma'(z) = \sigma(z)\,(1 - \sigma(z)) \): the derivative comes free.
+                It will cancel beautifully in the gradient.
+            </div>
+        </div>
+        <div class="viz-wrap">
+            <svg id="viz-sig" width="470" height="300"></svg>
+            <div class="viz-controls">
+                <label>\(\theta_0\) <input type="range" id="sig-b" min="-6" max="6" step="0.1" value="0" oninput="SIG.render()">
+                    <span class="val" id="sig-b-val"></span></label>
+                <label>\(\theta_1\) <input type="range" id="sig-m" min="-4" max="8" step="0.1" value="1.5" oninput="SIG.render()">
+                    <span class="val" id="sig-m-val"></span></label>
+            </div>
+            <p class="tiny-text muted">\(\sigma(\theta_0 + \theta_1 x)\): \(\theta_0\) slides the transition, \(\theta_1\) sharpens it.</p>
+        </div>
+    </div>
+</section>
+
+<!-- 4 ============ THE MODEL ============ -->
+<section>
+    <h2>The Logistic Regression Model</h2>
+    <div class="key-k2" style="max-width: 78%;">
+        \( P(y = 1 \mid x;\, \theta) = \sigma(\theta^\top x) = \dfrac{1}{1 + e^{-\theta^\top x}} \)
+    </div>
+    <p class="small-text fragment" style="margin-top: 0.6em;">Both cases in one line (check \(y=1\) and \(y=0\)):</p>
+    <p class="fragment" style="text-align: center;">
+        \( P(y \mid x;\, \theta) = \underbrace{\sigma(\theta^\top x)^{\,y}}_{\text{on when } y=1}
+           \cdot \underbrace{(1 - \sigma(\theta^\top x))^{\,1-y}}_{\text{on when } y=0} \)
+    </p>
+    <div class="fragment aside-rule small-text" style="margin-top: 0.7em;">
+        Still a linear model at heart: the linearity lives inside \(\theta^\top x\).
+        The sigmoid only translates that score into a probability.
+    </div>
+</section>
+
+<!-- 5 ============ THE RECIPE ============ -->
+<section>
+    <h2>The Same Four Steps, Every Time</h2>
+    <div class="recipe small-text">
+        <div class="step done"><span class="n">1</span><strong>Predictor</strong><br>\(\sigma(\theta^\top x)\) &nbsp;done</div>
+        <div class="step open"><span class="n">2</span><strong>Loss</strong><br>which one?</div>
+        <div class="step"><span class="n">3</span><strong>Optimize</strong><br>gradient descent</div>
+        <div class="step"><span class="n">4</span><strong>Test</strong><br>metrics</div>
+    </div>
+    <p class="small-text fragment">This recipe carried linear regression, carries logistic regression today,
+        and will carry neural networks next week. Only the ingredients change.</p>
+    <div class="fragment box-b yellow small-text"><span class="tab">The open question</span>
+        Squared error worked for regression. Does it work here?
+    </div>
+</section>
+
+<!-- 6 ============ WHICH LOSS ============ -->
+<section>
+    <h2>Squared Error Meets the Sigmoid</h2>
+    <div class="viz-wrap"><svg id="viz-loss" width="720" height="310"></svg></div>
+    <div class="viz-controls">
+        <button class="btn active" id="ls-mse" onclick="LOSS.setMode('mse')">Squared error</button>
+        <button class="btn" id="ls-bce" onclick="LOSS.setMode('bce')">Cross-entropy</button>
+        <button class="btn" id="ls-both" onclick="LOSS.setMode('both')">Both</button>
+    </div>
+    <p class="tiny-text muted" style="text-align:center; margin-top: 4px;">
+        The loss as a function of \(\theta_1\) on the tumor data. Squared error saturates into flat
+        plateaus where the gradient dies; cross-entropy stays a clean bowl.
+    </p>
+</section>
+
+<!-- 7 ============ MLE -> CROSS-ENTROPY ============ -->
+<section>
+    <section>
+        <h2>The Loss Probability Chooses</h2>
+        <p class="small-text">Same move as last lecture: assume the model, ask which \(\theta\) makes the data most likely.</p>
+        <div class="eq-box small-text fragment">
+            \( \displaystyle L(\theta) = \prod_{i=1}^{m} \sigma(\theta^\top x^{(i)})^{\,y^{(i)}}
+               (1 - \sigma(\theta^\top x^{(i)}))^{\,1-y^{(i)}} \)
+        </div>
+        <div class="eq-box small-text fragment">
+            \( \displaystyle \ell(\theta) = \sum_{i=1}^{m} \left[ y^{(i)} \log \sigma(\theta^\top x^{(i)})
+               + (1 - y^{(i)}) \log (1 - \sigma(\theta^\top x^{(i)})) \right] \)
+        </div>
+        <p class="tiny-text muted fragment">next: flip the sign, average, and meet the loss</p>
+    </section>
+    <section>
+        <h3 style="color: var(--accent-green);">Binary cross-entropy</h3>
+        <div class="key-k2 blue" style="max-width: 96%;">
+            \( \displaystyle J(\theta) = -\frac{1}{m} \sum_{i=1}^{m} \left[ y^{(i)} \log \sigma(\theta^\top x^{(i)})
+               + (1 - y^{(i)}) \log(1 - \sigma(\theta^\top x^{(i)})) \right] \)
+        </div>
+        <div class="two-column small-text" style="margin-top: 0.6em;">
+            <div class="box-b fragment"><span class="tab">Reading it</span>
+                Only one term is active per example. Confident and right: loss near 0.
+                Confident and wrong: \(-\log(p)\) explodes.
+            </div>
+            <div class="box-b green fragment"><span class="tab">Why it wins</span>
+                Convex in \(\theta\), no dead plateaus, and it is exactly maximum likelihood
+                for the Bernoulli model.
+            </div>
+        </div>
+    </section>
+</section>
+
+<!-- 8 ============ GRADIENT: SAME UPDATE ============ -->
+<section>
+    <h2>The Gradient Is an Old Friend</h2>
+    <p class="small-text">Differentiate \(J(\theta)\); the sigmoid's self-derivative cancels the log's denominator:</p>
+    <div class="key-k1 fragment" style="max-width: 88%;"><span class="tab">Gradient</span>
+        \( \displaystyle \frac{\partial J}{\partial \theta_j} = \frac{1}{m} \sum_{i=1}^{m}
+           \left( \sigma(\theta^\top x^{(i)}) - y^{(i)} \right) x_j^{(i)} \)
+    </div>
+    <div class="fragment box-b small-text" style="margin-top: 0.9em;"><span class="tab">Deja vu</span>
+        Identical in form to linear regression's gradient: (prediction error) times (input).
+        Different model, different loss, same shape of update. This is not a coincidence
+        (it is the GLM story, coming in the MLE lecture).
+    </div>
+    <p class="fragment small-text" style="margin-top: 0.4em;">
+        So training is unchanged: \( \theta := \theta - \frac{\alpha}{m} X^\top (\sigma(X\theta) - y) \).
+    </p>
+</section>
+
+<!-- 9 ============ DECISION BOUNDARY INTERACTIVE ============ -->
+<section>
+    <h2>Watch the Boundary Learn</h2>
+    <div class="viz-wrap" style="display: flex; gap: 14px; justify-content: center;">
+        <svg id="viz-db" width="450" height="330"></svg>
+        <svg id="viz-db-loss" width="330" height="330"></svg>
+    </div>
+    <div class="viz-controls">
+        <button class="btn" onclick="DB.step()">Step</button>
+        <button class="btn" id="db-play" onclick="DB.play()">▶ Play</button>
+        <button class="btn" onclick="DB.reset()">Reset</button>
+        <button class="btn" id="db-heat" onclick="DB.toggleHeat()">Probability shading: on</button>
+        <span class="tiny-text">iter <span class="val" id="db-iter">0</span> · J = <span class="val" id="db-cost" style="min-width: 4.2em;"></span></span>
+    </div>
+    <p class="tiny-text muted" style="text-align:center; margin-top: 4px;">
+        Two measured features (tumor size, cell irregularity). The line is \(\theta^\top x = 0\);
+        the shading is \(P(y=1)\). Click inside the plot to add a malignant point and watch the boundary respond.
+    </p>
+</section>
+
+<!-- 10 ============ BOUNDARY GEOMETRY ============ -->
+<section>
+    <h2>The Geometry of the Boundary</h2>
+    <div class="two-column small-text">
+        <div>
+            <div class="box-b"><span class="tab">Where</span>
+                Predict 1 when \(P \ge \tfrac12\), i.e. when \(\theta^\top x \ge 0\).
+                The boundary is the line (hyperplane) \(\theta^\top x = 0\).
+            </div>
+            <div class="box-b green fragment"><span class="tab">Orientation</span>
+                \((\theta_1, \dots, \theta_d)\) is the normal vector: it points toward the
+                predicted-positive side. \(\theta_0\) shifts the line off the origin.
+            </div>
+        </div>
+        <div>
+            <div class="box-b yellow fragment"><span class="tab">Confidence</span>
+                Distance from the boundary sets confidence: \(P\) approaches 0 or 1
+                as \(\theta^\top x\) grows in magnitude, and equals \(\tfrac12\) on the line.
+            </div>
+            <div class="aside-rule fragment">
+                Logistic regression can only draw straight boundaries.
+                Remember that; it becomes the cliffhanger of this lecture.
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 11 ============ THRESHOLD & METRICS ============ -->
+<section>
+    <h2>Step 4: Test. But Accuracy of What?</h2>
+    <div class="two-column">
+        <div class="viz-wrap">
+            <svg id="viz-thr" width="450" height="240"></svg>
+            <div class="viz-controls">
+                <label>threshold <input type="range" id="thr-t" min="0.02" max="0.98" step="0.01" value="0.5" oninput="THR.render()">
+                    <span class="val" id="thr-t-val"></span></label>
+                <button class="btn" id="thr-imb" onclick="THR.toggleImbalance()">Rare-disease mode: off</button>
+            </div>
+        </div>
+        <div class="small-text" style="text-align: center;">
+            <table class="cm" id="thr-cm">
+                <tr><th></th><th>pred 1</th><th>pred 0</th></tr>
+                <tr><th>true 1</th><td class="tp" id="cm-tp">0</td><td class="fn" id="cm-fn">0</td></tr>
+                <tr><th>true 0</th><td class="fp" id="cm-fp">0</td><td class="tn" id="cm-tn">0</td></tr>
+            </table>
+            <p class="tiny-text" style="margin-top: 0.6em;">
+                accuracy <span class="val" id="m-acc"></span> ·
+                precision <span class="val" id="m-prec"></span> ·
+                recall <span class="val" id="m-rec"></span> ·
+                F1 <span class="val" id="m-f1"></span>
+            </p>
+            <p class="tiny-text muted" id="thr-story" style="min-height: 3em;"></p>
+        </div>
+    </div>
+    <p class="tiny-text muted" style="text-align:center;">
+        Precision: of the flagged, how many are real. Recall: of the real, how many we caught.
+        Slide the threshold; try rare-disease mode and watch accuracy become a liar.
+    </p>
+</section>
+
+<!-- 12 ============ CODE ============ -->
+<section>
+    <h2>Logistic Regression in Twelve Lines</h2>
+    <pre><code class="language-python" data-trim data-line-numbers="|1-5|7-9|11-13">
+import numpy as np
+
+def sigmoid(z):
+    return 1.0 / (1.0 + np.exp(-z))
+
+X = np.c_[np.ones(len(x1)), x1, x2]   # n x 3: bias + two features
+theta = np.zeros(3)
+alpha = 0.5
+
+for t in range(2000):                 # batch gradient descent
+    p = sigmoid(X @ theta)            # predicted probabilities
+    theta -= alpha / len(y) * (X.T @ (p - y))
+
+print(theta)                          # boundary: theta . x = 0
+    </code></pre>
+    <p class="tiny-text muted" style="text-align:center; margin-top: 6px;">
+        Line 12 is the whole lecture: (prediction error) times (input), averaged. Swap the sigmoid
+        for the identity and this is last week's linear regression code.
+    </p>
+</section>
+
+<!-- 13 ============ EXPLORE FURTHER ============ -->
+<section>
+    <h2>Explore Further</h2>
+    <p class="small-text">Two excellent interactive treatments, right from this slide:</p>
+    <div class="link-chips">
+        <a class="btn" href="https://mlu-explain.github.io/logistic-regression/" data-preview-link>
+            MLU-Explain: Logistic Regression (visual essay)</a>
+        <a class="btn" href="https://playground.tensorflow.org/#activation=sigmoid&batchSize=10&dataset=gauss&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=5&networkShape=&seed=0.42&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false" data-preview-link>
+            TensorFlow Playground: a single sigmoid neuron</a>
+    </div>
+    <div class="box-b green small-text fragment" style="margin-top: 0.8em;"><span class="tab">Look closely</span>
+        The Playground link has zero hidden layers and a sigmoid output. That configuration
+        <em>is</em> logistic regression: one neuron. Hold that thought for two lectures.
+    </div>
+</section>
+
+<!-- 14 ============ PROVOCATION ============ -->
+<section class="centered">
+    <h2 style="font-size: 1.5em; margin-top: 1.2em;">What if the boundary needs to <em>curve</em>?</h2>
+    <div class="viz-wrap" style="margin-top: 0.6em;"><svg id="viz-xor" width="360" height="240"></svg></div>
+    <p class="small-text muted fragment">No straight line separates these classes.
+        Two answers exist: invent better features by hand, or let the model learn them.
+        That second answer is called a <span class="keyword">neural network</span>.</p>
+</section>
+
+<!-- 15 ============ SUMMARY ============ -->
+<section>
+    <h2>Summary</h2>
+    <div class="two-column small-text">
+        <div>
+            <div class="box-c"><div class="hdr">The model</div><div class="bod">
+                \( P(y{=}1 \mid x) = \sigma(\theta^\top x) \): a linear score squashed to a probability.</div></div>
+            <div class="box-c green"><div class="hdr">The loss</div><div class="bod">
+                Binary cross-entropy: maximum likelihood for Bernoulli labels, convex, no dead plateaus.</div></div>
+        </div>
+        <div>
+            <div class="box-c yellow"><div class="hdr">The update</div><div class="bod">
+                \( \theta := \theta - \frac{\alpha}{m} X^\top(\sigma(X\theta) - y) \): error times input, again.</div></div>
+            <div class="box-c red"><div class="hdr">The caveats</div><div class="bod">
+                Boundaries are straight; accuracy misleads on imbalanced data; pick the threshold for the cost you care about.</div></div>
+        </div>
+    </div>
+    <p class="small-text muted" style="margin-top: 0.6em;">
+        Next: maximum likelihood as a worldview, and the family that unites linear and logistic regression.
+    </p>
+</section>
+
+</div>
+</div>
+
+<script src="../../framework/vendor/reveal.js"></script>
+<script src="../../framework/vendor/highlight.js"></script>
+<script src="../../framework/vendor/d3.min.js"></script>
+<script defer src="../../framework/vendor/katex/katex.min.js"></script>
+<script defer src="../../framework/vendor/katex/contrib/auto-render.min.js"></script>
+<script>
+const PAL = {
+    blue: '#61afef', green: '#98c379', yellow: '#e5c07b', red: '#e06c75',
+    purple: '#c678dd', cyan: '#56b6c2', orange: '#d19a66', grid: '#4a5261',
+};
+
+// deterministic PRNG (no Math.random: decks must render identically every load)
+function mulberry32(seed) {
+    return function () {
+        seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+        let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+        t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+}
+
+function sigmoid(z) { return 1 / (1 + Math.exp(-z)); }
+
+function axes(svg, W, H, M, xdom, ydom, xlab, ylab, yticks = 5) {
+    const x = d3.scaleLinear().domain(xdom).range([M.l, W - M.r]);
+    const y = d3.scaleLinear().domain(ydom).range([H - M.b, M.t]);
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - M.b})`)
+        .call(d3.axisBottom(x).ticks(5));
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(${M.l},0)`)
+        .call(d3.axisLeft(y).ticks(yticks));
+    const svgEl = svg.node();
+    let wrap = svgEl.parentElement;
+    if (!wrap.classList.contains('viz-mathwrap')) {
+        wrap = document.createElement('div');
+        wrap.className = 'viz-mathwrap';
+        wrap.style.cssText = 'position:relative;display:inline-block;line-height:0;';
+        svgEl.parentNode.insertBefore(wrap, svgEl);
+        wrap.appendChild(svgEl);
+    }
+    wrap.querySelectorAll('.viz-axlabel').forEach(el => el.remove());
+    const putLabel = (tex, lx, ly, rot) => {
+        const el = document.createElement('div');
+        el.className = 'viz-axlabel';
+        el.style.cssText = 'position:absolute;pointer-events:none;color:#cfd6e4;font-size:17px;line-height:1;'
+            + 'transform:translate(-50%,-50%)' + (rot ? ' rotate(-90deg)' : '') + ';';
+        try { katex.render(tex, el, { throwOnError: false }); } catch (e) { el.textContent = tex; }
+        el.style.left = lx + 'px'; el.style.top = ly + 'px';
+        wrap.appendChild(el);
+    };
+    if (xlab) putLabel(xlab, (M.l + W - M.r) / 2, H - 12);
+    if (ylab) putLabel(ylab, 16, (M.t + H - M.b) / 2, true);
+    return { x, y };
+}
+
+// ---- 1D tumor data (size cm -> 0 benign / 1 malignant), deliberate overlap ----
+const T1D = [
+    { x: 0.6, y: 0 }, { x: 0.9, y: 0 }, { x: 1.1, y: 0 }, { x: 1.4, y: 0 },
+    { x: 1.6, y: 0 }, { x: 1.9, y: 0 }, { x: 2.1, y: 0 }, { x: 2.5, y: 1 },
+    { x: 2.6, y: 0 }, { x: 2.8, y: 1 }, { x: 3.0, y: 0 }, { x: 3.1, y: 1 },
+    { x: 3.3, y: 1 }, { x: 3.6, y: 1 }, { x: 3.9, y: 1 }, { x: 4.2, y: 1 },
+    { x: 4.5, y: 1 }, { x: 4.8, y: 1 },
+];
+
+function fit1D(data, iters = 4000, alpha = 0.8) {
+    let b = 0, m = 0;
+    for (let t = 0; t < iters; t++) {
+        let gb = 0, gm = 0;
+        for (const d of data) {
+            const e = sigmoid(b + m * d.x) - d.y;
+            gb += e; gm += e * d.x;
+        }
+        b -= alpha * gb / data.length;
+        m -= alpha * gm / data.length;
+    }
+    return { b, m };
+}
+const T1D_FIT = fit1D(T1D);
+
+function drawLabeledDots(svg, s, data, r = 6) {
+    svg.selectAll('.dot').data(data).join('circle').attr('class', 'dot')
+        .attr('cx', d => s.x(d.x)).attr('cy', d => s.y(d.y))
+        .attr('r', r)
+        .attr('fill', d => d.y ? PAL.red : PAL.cyan)
+        .attr('stroke', '#0d1017').attr('stroke-width', 1.5);
+}
+
+// ===================== LABELS: the data =====================
+const LAB = {};
+LAB.init = function () {
+    const svg = d3.select('#viz-labels'); svg.selectAll('*').remove();
+    const s = axes(svg, 720, 290, { l: 120, r: 20, t: 18, b: 46 }, [0, 5.4], [-0.15, 1.15],
+        '\\text{tumor size (cm)}', '', 2);
+    svg.append('text').attr('x', 112).attr('y', s.y(0) + 5).attr('text-anchor', 'end')
+        .attr('fill', PAL.cyan).attr('font-size', 15).text('benign (y = 0)');
+    svg.append('text').attr('x', 112).attr('y', s.y(1) + 5).attr('text-anchor', 'end')
+        .attr('fill', PAL.red).attr('font-size', 15).text('malignant (y = 1)');
+    drawLabeledDots(svg, s, T1D);
+};
+
+// ===================== LF: linear regression fails =====================
+const LF = { outlier: false, sig: false };
+LF.init = function () {
+    const svg = d3.select('#viz-lrfail'); svg.selectAll('*').remove();
+    LF.s = axes(svg, 720, 320, { l: 62, r: 20, t: 16, b: 46 }, [0, 9.5], [-0.4, 1.5],
+        '\\text{tumor size (cm)}', 'y\\ /\\ \\text{prediction}', 4);
+    // reference lines at y=0 and y=1
+    for (const yv of [0, 1]) {
+        svg.append('line').attr('x1', LF.s.x(0)).attr('x2', LF.s.x(9.5))
+            .attr('y1', LF.s.y(yv)).attr('y2', LF.s.y(yv))
+            .attr('stroke', PAL.grid).attr('stroke-dasharray', '3,4');
+    }
+    LF.gdots = svg.append('g');
+    LF.ghostLine = svg.append('line').attr('stroke', PAL.green).attr('stroke-width', 1.6)
+        .attr('stroke-dasharray', '5,5').attr('opacity', 0);
+    LF.ghostSig = svg.append('path').attr('fill', 'none').attr('stroke', PAL.yellow)
+        .attr('stroke-width', 1.6).attr('stroke-dasharray', '5,5').attr('opacity', 0);
+    LF.line = svg.append('line').attr('stroke', PAL.green).attr('stroke-width', 2.5);
+    LF.sigPath = svg.append('path').attr('fill', 'none').attr('stroke', PAL.yellow)
+        .attr('stroke-width', 2.5).attr('opacity', 0);
+    LF.base = LF.fits(T1D);   // no-outlier reference fits
+    LF.render();
+};
+LF.data = function () {
+    return LF.outlier ? T1D.concat([{ x: 9.0, y: 1 }]) : T1D;
+};
+LF.fits = function (data) {
+    const n = data.length;
+    const sx = d3.sum(data, d => d.x), sy = d3.sum(data, d => d.y);
+    const sxx = d3.sum(data, d => d.x * d.x), sxy = d3.sum(data, d => d.x * d.y);
+    const m = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+    return { line: { m, b: (sy - m * sx) / n }, sig: fit1D(data, 2500) };
+};
+LF.render = function () {
+    if (!LF.s) return;
+    const data = LF.data();
+    LF.gdots.selectAll('circle').data(data).join('circle')
+        .attr('cx', d => LF.s.x(d.x)).attr('cy', d => LF.s.y(d.y))
+        .attr('r', 6).attr('fill', d => d.y ? PAL.red : PAL.cyan)
+        .attr('stroke', '#0d1017').attr('stroke-width', 1.5);
+    const F = LF.outlier ? LF.fits(data) : LF.base;
+    const sigLine = d3.line().x(d => LF.s.x(d[0])).y(d => LF.s.y(d[1]));
+    const sigPts = f => d3.range(0, 9.51, 0.05).map(x => [x, sigmoid(f.b + f.m * x)]);
+    LF.line.attr('x1', LF.s.x(0)).attr('y1', LF.s.y(F.line.b))
+           .attr('x2', LF.s.x(9.5)).attr('y2', LF.s.y(F.line.b + F.line.m * 9.5));
+    LF.sigPath.attr('d', sigLine(sigPts(F.sig))).attr('opacity', LF.sig ? 1 : 0);
+    // ghosts: where the fits were BEFORE the outlier, for contrast
+    const g = LF.base;
+    LF.ghostLine.attr('x1', LF.s.x(0)).attr('y1', LF.s.y(g.line.b))
+        .attr('x2', LF.s.x(9.5)).attr('y2', LF.s.y(g.line.b + g.line.m * 9.5))
+        .attr('opacity', LF.outlier ? 0.45 : 0);
+    LF.ghostSig.attr('d', sigLine(sigPts(g.sig)))
+        .attr('opacity', LF.outlier && LF.sig ? 0.45 : 0);
+};
+LF.toggleOutlier = function () {
+    LF.outlier = !LF.outlier;
+    const btn = document.getElementById('lf-outlier');
+    btn.classList.toggle('active', LF.outlier);
+    btn.textContent = LF.outlier ? 'Remove the far point' : 'Add one obvious malignant case, far right';
+    LF.render();
+};
+LF.toggleSigmoid = function () {
+    LF.sig = !LF.sig;
+    document.getElementById('lf-sig').classList.toggle('active', LF.sig);
+    LF.render();
+};
+
+// ===================== SIG: sigmoid explorer =====================
+const SIG = {};
+SIG.init = function () {
+    const svg = d3.select('#viz-sig'); svg.selectAll('*').remove();
+    SIG.s = axes(svg, 470, 300, { l: 56, r: 14, t: 14, b: 46 }, [-6, 6], [-0.05, 1.05],
+        'x', '\\sigma(\\theta_0 + \\theta_1 x)', 3);
+    svg.append('line').attr('x1', SIG.s.x(-6)).attr('x2', SIG.s.x(6))
+        .attr('y1', SIG.s.y(0.5)).attr('y2', SIG.s.y(0.5))
+        .attr('stroke', PAL.grid).attr('stroke-dasharray', '3,4');
+    svg.append('text').attr('x', SIG.s.x(-5.7)).attr('y', SIG.s.y(0.5) - 7)
+        .attr('fill', PAL.grid).attr('font-size', 13).text('P = 0.5');
+    SIG.path = svg.append('path').attr('fill', 'none').attr('stroke', PAL.yellow).attr('stroke-width', 2.5);
+    SIG.render();
+};
+SIG.render = function () {
+    if (!SIG.s) return;
+    const b = +document.getElementById('sig-b').value;
+    const m = +document.getElementById('sig-m').value;
+    document.getElementById('sig-b-val').textContent = b.toFixed(1);
+    document.getElementById('sig-m-val').textContent = m.toFixed(1);
+    const pts = d3.range(-6, 6.01, 0.05).map(x => [x, sigmoid(b + m * x)]);
+    SIG.path.attr('d', d3.line().x(d => SIG.s.x(d[0])).y(d => SIG.s.y(d[1]))(pts));
+};
+
+// ===================== LOSS: MSE vs BCE landscape =====================
+const LOSS = { mode: 'mse' };
+LOSS.J = function (kind, m) {
+    const b = T1D_FIT.b;   // intercept held at the fitted value; sweep the slope
+    let s = 0;
+    for (const d of T1D) {
+        const p = Math.min(1 - 1e-6, Math.max(1e-6, sigmoid(b + m * d.x)));
+        s += kind === 'mse' ? (p - d.y) ** 2
+                            : -(d.y * Math.log(p) + (1 - d.y) * Math.log(1 - p));
+    }
+    return s / T1D.length;
+};
+LOSS.init = function () {
+    const svg = d3.select('#viz-loss'); svg.selectAll('*').remove();
+    LOSS.s = axes(svg, 720, 310, { l: 62, r: 20, t: 16, b: 46 }, [-4, 10], [0, 3],
+        '\\theta_1\\ \\text{(steepness)}', '\\text{loss}', 5);
+    LOSS.gm = svg.append('path').attr('fill', 'none').attr('stroke', PAL.red).attr('stroke-width', 2.5);
+    LOSS.gb = svg.append('path').attr('fill', 'none').attr('stroke', PAL.blue).attr('stroke-width', 2.5);
+    LOSS.lm = svg.append('text').attr('fill', PAL.red).attr('font-size', 15).text('squared error');
+    LOSS.lb = svg.append('text').attr('fill', PAL.blue).attr('font-size', 15).text('cross-entropy');
+    LOSS.am = svg.append('text').attr('fill', PAL.red).attr('font-size', 13).attr('opacity', 0.85)
+        .text('flat: gradient nearly zero, learning stalls');
+    LOSS.ab = svg.append('text').attr('fill', PAL.blue).attr('font-size', 13).attr('opacity', 0.85)
+        .text('always sloped: always a signal');
+    LOSS.render();
+};
+LOSS.render = function () {
+    if (!LOSS.s) return;
+    const clip = v => Math.min(3.2, v);
+    const line = d3.line().x(d => LOSS.s.x(d[0])).y(d => LOSS.s.y(clip(d[1])));
+    const grid = d3.range(-4, 10.01, 0.06);
+    const mse = grid.map(m => [m, LOSS.J('mse', m)]);
+    const bce = grid.map(m => [m, LOSS.J('bce', m)]);
+    const showM = LOSS.mode !== 'bce', showB = LOSS.mode !== 'mse';
+    LOSS.gm.attr('d', line(mse)).attr('opacity', showM ? 1 : 0.12);
+    LOSS.gb.attr('d', line(bce)).attr('opacity', showB ? 1 : 0.12);
+    LOSS.lm.attr('x', LOSS.s.x(-3.8)).attr('y', LOSS.s.y(mse[6][1]) - 12).attr('opacity', showM ? 1 : 0.15);
+    LOSS.lb.attr('x', LOSS.s.x(1.1)).attr('y', LOSS.s.y(3) + 18).attr('opacity', showB ? 1 : 0.15);
+    LOSS.am.attr('x', LOSS.s.x(-3.8)).attr('y', LOSS.s.y(mse[6][1]) + 26).attr('opacity', showM ? 0.85 : 0);
+    LOSS.ab.attr('x', LOSS.s.x(1.1)).attr('y', LOSS.s.y(3) + 36).attr('opacity', showB ? 0.85 : 0);
+};
+LOSS.setMode = function (mode) {
+    LOSS.mode = mode;
+    for (const id of ['ls-mse', 'ls-bce', 'ls-both'])
+        document.getElementById(id).classList.remove('active');
+    document.getElementById('ls-' + mode).classList.add('active');
+    LOSS.render();
+};
+
+// ===================== DB: 2D decision boundary =====================
+const DB = { heat: true, timer: null, iter: 0, extra: [] };
+DB.XD = [0, 6]; DB.YD = [0, 6];
+DB.makeData = function () {
+    const rnd = mulberry32(7);
+    const pts = [];
+    for (let i = 0; i < 22; i++)
+        pts.push({ x1: 1.6 + (rnd() - 0.5) * 2.2, x2: 1.8 + (rnd() - 0.5) * 2.2, y: 0 });
+    for (let i = 0; i < 22; i++)
+        pts.push({ x1: 4.1 + (rnd() - 0.5) * 2.2, x2: 4.0 + (rnd() - 0.5) * 2.2, y: 1 });
+    return pts;
+};
+DB.init = function () {
+    DB.data = DB.makeData().concat(DB.extra);
+    const svg = d3.select('#viz-db'); svg.selectAll('*').remove();
+    DB.s = axes(svg, 450, 330, { l: 56, r: 12, t: 12, b: 46 }, DB.XD, DB.YD,
+        '\\text{size (cm)}', '\\text{irregularity}', 5);
+    // probability heat grid (coarse rects under everything)
+    DB.cells = [];
+    const NX = 34, NY = 26;
+    const gx = (DB.XD[1] - DB.XD[0]) / NX, gy = (DB.YD[1] - DB.YD[0]) / NY;
+    const heatG = svg.insert('g', ':first-child');
+    for (let i = 0; i < NX; i++)
+        for (let j = 0; j < NY; j++)
+            DB.cells.push({ cx: DB.XD[0] + (i + 0.5) * gx, cy: DB.YD[0] + (j + 0.5) * gy });
+    DB.heatSel = heatG.selectAll('rect').data(DB.cells).join('rect')
+        .attr('x', d => DB.s.x(d.cx - gx / 2)).attr('y', d => DB.s.y(d.cy + gy / 2))
+        .attr('width', DB.s.x(gx) - DB.s.x(0) + 0.5)
+        .attr('height', DB.s.y(0) - DB.s.y(gy) + 0.5);
+    DB.gdots = svg.append('g');
+    DB.bline = svg.append('line').attr('stroke', PAL.yellow).attr('stroke-width', 2.5);
+    // click to add a malignant point
+    svg.on('click', function (ev) {
+        const [px, py] = d3.pointer(ev);
+        const x1 = DB.s.x.invert(px), x2 = DB.s.y.invert(py);
+        if (x1 < DB.XD[0] || x1 > DB.XD[1] || x2 < DB.YD[0] || x2 > DB.YD[1]) return;
+        DB.extra.push({ x1, x2, y: 1 });
+        DB.data.push({ x1, x2, y: 1 });
+        DB.render();
+    });
+    // loss panel
+    const svg2 = d3.select('#viz-db-loss'); svg2.selectAll('*').remove();
+    DB.s2 = axes(svg2, 330, 330, { l: 60, r: 12, t: 12, b: 46 }, [0, 200], [0, 0.8],
+        '\\text{iteration}', 'J(\\theta)', 4);
+    DB.lossPath = svg2.append('path').attr('fill', 'none').attr('stroke', PAL.green).attr('stroke-width', 2);
+    DB.resetState();
+    DB.render();
+};
+DB.resetState = function () {
+    DB.stop(); DB.iter = 0; DB.th = [0.0, 0.0, 0.0]; DB.hist = [];
+};
+DB.reset = function () { DB.extra = []; DB.init(); };
+DB.cost = function () {
+    let s = 0;
+    for (const d of DB.data) {
+        const p = Math.min(1 - 1e-9, Math.max(1e-9, sigmoid(DB.th[0] + DB.th[1] * d.x1 + DB.th[2] * d.x2)));
+        s += -(d.y * Math.log(p) + (1 - d.y) * Math.log(1 - p));
+    }
+    return s / DB.data.length;
+};
+DB.step = function () {
+    for (let k = 0; k < 8; k++) {   // several GD iterations per click/frame
+        let g0 = 0, g1 = 0, g2 = 0;
+        for (const d of DB.data) {
+            const e = sigmoid(DB.th[0] + DB.th[1] * d.x1 + DB.th[2] * d.x2) - d.y;
+            g0 += e; g1 += e * d.x1; g2 += e * d.x2;
+        }
+        const n = DB.data.length, a = 0.9;
+        DB.th[0] -= a * g0 / n; DB.th[1] -= a * g1 / n; DB.th[2] -= a * g2 / n;
+        DB.iter++;
+    }
+    DB.hist.push([DB.iter, DB.cost()]);
+    if (DB.hist.length > 100) DB.hist.shift();
+    DB.render();
+};
+DB.render = function () {
+    if (!DB.s) return;
+    const [t0, t1, t2] = DB.th;
+    DB.heatSel
+        .attr('fill', d => {
+            if (!DB.heat) return 'transparent';
+            const p = sigmoid(t0 + t1 * d.cx + t2 * d.cy);
+            return p > 0.5 ? PAL.red : PAL.cyan;
+        })
+        .attr('opacity', d => {
+            if (!DB.heat) return 0;
+            const p = sigmoid(t0 + t1 * d.cx + t2 * d.cy);
+            return Math.abs(p - 0.5) * 0.34;
+        });
+    DB.gdots.selectAll('circle').data(DB.data).join('circle')
+        .attr('cx', d => DB.s.x(d.x1)).attr('cy', d => DB.s.y(d.x2))
+        .attr('r', 5.5).attr('fill', d => d.y ? PAL.red : PAL.cyan)
+        .attr('stroke', '#0d1017').attr('stroke-width', 1.4);
+    // boundary t0 + t1 x + t2 y = 0
+    if (Math.abs(t2) > 1e-9) {
+        const yAt = x => (-t0 - t1 * x) / t2;
+        DB.bline.attr('x1', DB.s.x(DB.XD[0])).attr('y1', DB.s.y(Math.max(-2, Math.min(8, yAt(DB.XD[0])))))
+                .attr('x2', DB.s.x(DB.XD[1])).attr('y2', DB.s.y(Math.max(-2, Math.min(8, yAt(DB.XD[1])))))
+                .attr('opacity', DB.iter ? 1 : 0.25);
+    } else { DB.bline.attr('opacity', 0); }
+    DB.lossPath.attr('d', d3.line()
+        .x(d => DB.s2.x(Math.min(200, d[0]))).y(d => DB.s2.y(Math.min(0.8, d[1])))(DB.hist));
+    document.getElementById('db-iter').textContent = DB.iter;
+    document.getElementById('db-cost').textContent = DB.cost().toFixed(3);
+};
+DB.play = function () {
+    if (DB.timer) return DB.stop();
+    document.getElementById('db-play').textContent = '⏸ Pause';
+    DB.timer = setInterval(() => { DB.step(); if (DB.iter > 800) DB.stop(); }, 110);
+};
+DB.stop = function () {
+    if (DB.timer) clearInterval(DB.timer);
+    DB.timer = null;
+    const btn = document.getElementById('db-play');
+    if (btn) btn.textContent = '▶ Play';
+};
+DB.toggleHeat = function () {
+    DB.heat = !DB.heat;
+    document.getElementById('db-heat').textContent =
+        DB.heat ? 'Probability shading: on' : 'Probability shading: off';
+    DB.render();
+};
+
+// ===================== THR: threshold & confusion matrix =====================
+const THR = { imbalance: false };
+THR.init = function () {
+    const svg = d3.select('#viz-thr'); svg.selectAll('*').remove();
+    THR.s = axes(svg, 450, 240, { l: 56, r: 14, t: 12, b: 46 }, [0, 5.4], [-0.08, 1.08],
+        '\\text{tumor size (cm)}', 'P(y{=}1)', 3);
+    const f = T1D_FIT;
+    const pts = d3.range(0, 5.41, 0.04).map(x => [x, sigmoid(f.b + f.m * x)]);
+    svg.append('path').attr('fill', 'none').attr('stroke', PAL.yellow).attr('stroke-width', 2)
+        .attr('d', d3.line().x(d => THR.s.x(d[0])).y(d => THR.s.y(d[1]))(pts));
+    THR.gdots = svg.append('g');
+    THR.tline = svg.append('line').attr('stroke', '#dbe4f5').attr('stroke-width', 1.6)
+        .attr('stroke-dasharray', '5,4');
+    THR.render();
+};
+THR.data = function () {
+    if (!THR.imbalance) return T1D;
+    // rare-disease mode: flood with benign cases at the small end (deterministic)
+    const rnd = mulberry32(11);
+    const extra = d3.range(60).map(() => ({ x: 0.4 + rnd() * 2.1, y: 0 }));
+    return T1D.concat(extra);
+};
+THR.render = function () {
+    if (!THR.s) return;
+    const t = +document.getElementById('thr-t').value;
+    document.getElementById('thr-t-val').textContent = t.toFixed(2);
+    const data = THR.data();
+    const f = T1D_FIT;
+    THR.gdots.selectAll('circle').data(data).join('circle')
+        .attr('cx', d => THR.s.x(d.x)).attr('cy', d => THR.s.y(d.y ? 1 : 0))
+        .attr('r', 4.5).attr('fill', d => d.y ? PAL.red : PAL.cyan)
+        .attr('opacity', 0.85).attr('stroke', '#0d1017').attr('stroke-width', 1);
+    THR.tline.attr('x1', THR.s.x(0)).attr('x2', THR.s.x(5.4))
+             .attr('y1', THR.s.y(t)).attr('y2', THR.s.y(t));
+    let TP = 0, FP = 0, TN = 0, FN = 0;
+    for (const d of data) {
+        const p = sigmoid(f.b + f.m * d.x);
+        const pred = p >= t ? 1 : 0;
+        if (pred === 1 && d.y === 1) TP++;
+        else if (pred === 1 && d.y === 0) FP++;
+        else if (pred === 0 && d.y === 0) TN++;
+        else FN++;
+    }
+    const acc = (TP + TN) / data.length;
+    const prec = TP + FP ? TP / (TP + FP) : 0;
+    const rec = TP + FN ? TP / (TP + FN) : 0;
+    const f1 = prec + rec ? 2 * prec * rec / (prec + rec) : 0;
+    for (const [id, v] of [['cm-tp', TP], ['cm-fp', FP], ['cm-tn', TN], ['cm-fn', FN]])
+        document.getElementById(id).textContent = v;
+    document.getElementById('m-acc').textContent = acc.toFixed(2);
+    document.getElementById('m-prec').textContent = prec.toFixed(2);
+    document.getElementById('m-rec').textContent = rec.toFixed(2);
+    document.getElementById('m-f1').textContent = f1.toFixed(2);
+    const story = document.getElementById('thr-story');
+    if (THR.imbalance && acc > 0.85 && rec < 0.999 && t > 0.85) {
+        story.textContent = 'High accuracy, but look at the missed malignant cases (FN). In a rare-disease clinic, accuracy is the wrong compass.';
+    } else if (THR.imbalance) {
+        story.textContent = 'Most patients are healthy now. Watch how accuracy stays flattering no matter what recall does.';
+    } else {
+        story.textContent = 'Lower the threshold to catch more disease (recall up, precision down). There is no free lunch, only a chosen trade.';
+    }
+};
+THR.toggleImbalance = function () {
+    THR.imbalance = !THR.imbalance;
+    const btn = document.getElementById('thr-imb');
+    btn.classList.toggle('active', THR.imbalance);
+    btn.textContent = THR.imbalance ? 'Rare-disease mode: on' : 'Rare-disease mode: off';
+    THR.render();
+};
+
+// ===================== XOR teaser =====================
+const XOR = {};
+XOR.init = function () {
+    const svg = d3.select('#viz-xor'); svg.selectAll('*').remove();
+    const s = axes(svg, 360, 240, { l: 46, r: 12, t: 12, b: 40 }, [-0.4, 1.4], [-0.4, 1.4], 'x_1', 'x_2', 3);
+    const pts = [
+        { x: 0, y: 0, c: 0 }, { x: 1, y: 1, c: 0 },
+        { x: 0, y: 1, c: 1 }, { x: 1, y: 0, c: 1 },
+    ];
+    svg.selectAll('.p').data(pts).join('circle')
+        .attr('cx', d => s.x(d.x)).attr('cy', d => s.y(d.y)).attr('r', 10)
+        .attr('fill', d => d.c ? PAL.red : PAL.cyan)
+        .attr('stroke', '#0d1017').attr('stroke-width', 2);
+    svg.append('line').attr('x1', s.x(-0.3)).attr('y1', s.y(1.32)).attr('x2', s.x(1.32)).attr('y2', s.y(-0.3))
+        .attr('stroke', PAL.yellow).attr('stroke-width', 2).attr('stroke-dasharray', '6,5').attr('opacity', 0.7);
+    svg.append('text').attr('x', s.x(1.05)).attr('y', s.y(0.32)).attr('fill', PAL.yellow)
+        .attr('font-size', 13).text('any line fails');
+};
+
+// ===================== boot =====================
+Reveal.initialize({
+    hash: true,
+    slideNumber: true,
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    scrollActivationWidth: 600,
+    plugins: [RevealHighlight],
+});
+Reveal.on('ready', () => {
+    const boot = () => { LAB.init(); LF.init(); SIG.init(); LOSS.init(); DB.init(); THR.init(); XOR.init(); };
+    const rm = () => renderMathInElement(document.body, { delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '\\[', right: '\\]', display: true },
+        { left: '\\(', right: '\\)', display: false },
+    ]});
+    if (window.renderMathInElement) { rm(); boot(); }
+    else window.addEventListener('load', () => { rm(); boot(); });
+});
+Reveal.on('slidechanged', e => {
+    if (!e.currentSlide.querySelector('#viz-db')) DB.stop();
+});
+</script>
+</body>
+</html>

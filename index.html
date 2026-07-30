@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SemAtlas Learn</title>
+<link rel="stylesheet" href="framework/vendor/fonts/fonts.css">
+<style>
+    body { background: #0d1017; color: #e6ebf5; font-family: 'DM Sans', sans-serif;
+           max-width: 760px; margin: 8vh auto; padding: 0 24px; line-height: 1.6; }
+    h1 { font-family: 'Newsreader', Georgia, serif; font-weight: 600; font-size: 2.2em;
+         margin-bottom: 0.2em; }
+    .sub { color: #b8c1d1; margin-bottom: 2em; }
+    a { color: #61afef; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .deck { border: 1px solid rgba(219,228,245,0.16); border-radius: 12px;
+            padding: 14px 20px; margin: 12px 0; display: block; color: #e6ebf5; }
+    .deck:hover { border-color: rgba(97,175,239,0.5); text-decoration: none; }
+    .deck b { color: #e6ebf5; }
+    .deck span { color: #77808f; font-size: 0.85em; display: block; }
+    .foot { color: #77808f; font-size: 0.85em; margin-top: 3em; }
+</style>
+</head>
+<body>
+<h1>SemAtlas Learn</h1>
+<p class="sub">An open framework for interactive teaching decks, designed so that
+a model you run yourself can help you write them. Slides are plain HTML files:
+yours to keep, share, and read anywhere.</p>
+
+<a class="deck" href="decks/linear-regression/">
+    <b>Linear Regression</b>
+    <span>seed deck, ported from the original course material</span>
+</a>
+<a class="deck" href="decks/logistic-regression/">
+    <b>Logistic Regression</b>
+    <span>seed deck, ported from the original course material</span>
+</a>
+
+<p class="foot">Generate your own: <code>python3 adapter/generate.py "your topic"
+--model &lt;any local or hosted model&gt;</code>. New decks appear in
+<a href="decks/">decks/</a>. See the README for the grammar and the vision.</p>
+</body>
+</html>
