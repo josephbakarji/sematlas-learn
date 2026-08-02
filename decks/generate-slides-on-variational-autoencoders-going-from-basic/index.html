@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Slides On Variational Autoencoders Going From Basic Background All The Way Up To The Main Loss Function Of Vae'S. It Should Go In Detail From The Simplest Components Required For Understand Autoencoders And Variational Loss (Elbo Etc.) Building Up To A Full Understanding Of The Architecture. Create At Least One Interactive Slide On How The Model Works With An Interactive Neural Network And Maybe A Popular Image Used For Vae'S Showing The Gaussian Latent Distribution</title>
+    <link rel="stylesheet" href="../../framework/vendor/reset.css">
+    <link rel="stylesheet" href="../../framework/vendor/reveal.css">
+    <link rel="stylesheet" href="../../framework/vendor/night.css">
+    <link rel="stylesheet" href="../../framework/vendor/monokai.css">
+    <link rel="stylesheet" href="../../framework/vendor/katex/katex.min.css">
+    <link rel="stylesheet" href="../../framework/vendor/fonts/fonts.css">
+    <link rel="stylesheet" href="../../framework/css/sal.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<!-- SECTIONS START -->
+<section>
+    <p class="kicker">Machine Learning Basics</p>
+    <h1>Variational Autoencoders: A Comprehensive Overview</h1>
+    <p class="t-line">Understand the foundational elements and the latest advancements in Variational Autoencoders.</p>
+</section>
+
+<section>
+    <h2>Background: Introduction to Autoencoders</h2>
+    <div class="cardtitle">Autoencoder Architecture</div>
+    <div class="card">
+        <ul class="pts">
+            <li>This is a unsupervised learning model that learns an efficient encoding and decoding function.</li>
+            <li>A typical autoencoder consists of two main components: an encoder and a decoder.</li>
+        </ul>
+        <div class="eqbox fragment">
+            \[
+                \mathbb{E}_{x \sim p(x)}\left[\log p_\theta(x)\right] = -D_{KL}(p(x)||q(z|x))
+            \]
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Building Blocks: Latent Space and KL Divergence</h2>
+    <div class="cardtitle">Latent Variable Model</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The encoder maps input data points to a latent space, which is learned during training.</li>
+            <li>KL divergence measures the difference between two probability distributions.</li>
+        </ul>
+        <div class="eqbox fragment">
+            \[
+                D_{KL}(q(z|x)||p(z))
+            \]
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>The Elbo: The Objective Function of Variational Autoencoders</h2>
+    <div class="cardtitle">Latent Variable Model</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The ELBO (Evidence Lower Bound) is a lower bound on the log-likelihood of the data.</li>
+            <li>It consists of the reconstruction loss and the KL divergence.</li>
+        </ul>
+        <div class="eqbox fragment">
+            \[
+                \mathcal{L}(x, z; \theta) = -\log p_\theta(x|z) + D_{KL}(q(z|x)||p(z))
+            \]
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Interactive Neural Network: Understanding the Model</h2>
+    <div class="cardtitle">Interactive Neural Network</div>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>The encoder and decoder are neural networks that work together to compress and expand data.</li>
+            <li>Use Reveal.js features such as interactive elements to show how the model processes inputs and outputs.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Latent Space Visualization: Gaussian Distribution Example</h2>
+    <div class="cardtitle">Visualization</div>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>The latent space of a VAE is often represented as a distribution.</li>
+            <li>In the case of a Gaussian distribution, points close to each other in the latent space are similar in the original data.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Applications: Beyond Image Generation</h2>
+    <div class="cardtitle">Real-World Applications</div>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>Variational Autoencoders have been applied to various fields such as natural language processing and computer vision.</li>
+            <li>They can be used for data compression, denoising, and anomaly detection.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Check yourself</h2>
+    <div class="quiz" data-quiz='{
+      "question": "Which term makes the loss convex in \\(w\\)?",
+      "choices": {"A": "\\(b\\)", "B": "\\(w\\)", "C": "\\(x\\)", "D": "\\(z\\)"},
+      "correct": "B",
+      "explanation": "The choice of \\(w\\) ensures the loss function is convex.",
+      "hint": "Think about the properties of the KL divergence."
+    }'></div>
+</section>
+<!-- SECTIONS END -->
+</div>
+</div>
+<script src="../../framework/vendor/reveal.js"></script>
+<script src="../../framework/vendor/highlight.js"></script>
+<script src="../../framework/vendor/katex/katex.min.js"></script>
+<script src="../../framework/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../framework/js/quiz.js"></script>
+<script src="../../framework/js/net-diagram.js"></script>
+<script src="../../framework/js/sal.js"></script>
+<script>SAL.init();</script>
+</body>
+</html>

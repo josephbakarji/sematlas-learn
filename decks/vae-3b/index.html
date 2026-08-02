@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variational Autoencoders, Built Up From The Simplest Components: What An Autoencoder Is (Encoder, Decoder, Latent Space, Reconstruction Loss), Why We Make The Latent Space Probabilistic, Kl Divergence, The Reparameterization Trick, And A Careful Derivation Of The Elbo, Ending With The Full Vae Loss And Architecture</title>
+    <link rel="stylesheet" href="../../framework/vendor/reset.css">
+    <link rel="stylesheet" href="../../framework/vendor/reveal.css">
+    <link rel="stylesheet" href="../../framework/vendor/night.css">
+    <link rel="stylesheet" href="../../framework/vendor/monokai.css">
+    <link rel="stylesheet" href="../../framework/vendor/katex/katex.min.css">
+    <link rel="stylesheet" href="../../framework/vendor/fonts/fonts.css">
+    <link rel="stylesheet" href="../../framework/css/sal.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<!-- SECTIONS START -->
+<section>
+    <p class="kicker">Math, Machine Learning, Deep Learning</p>
+    <h1>Variational Autoencoders: From Basics to Complete Architecture</h1>
+    <p class="t-line">Understand the fundamental components of VAEs and derive their complete loss function.</p>
+</section>
+
+<section>
+    <h2>Autoencoder Primer</h2>
+    <div class="cardtitle">What is an Autoencoder?</div>
+    <div class="card">
+        <ul class="pts">
+            <li>An autoencoder consists of an encoder and a decoder, which are neural networks designed to learn a representation (latent space) of the input data.</li>
+            <li>The encoder maps inputs into a lower-dimensional latent space, and the decoder maps the latent space back to the original input dimensions.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Latent Space Probabilistic Representation</h2>
+    <div class="cardtitle">Why Probabilistic Latent Spaces?</div>
+    <div class="card">
+        <ul class="pts">
+            <li>Using probabilistic latent spaces allows for uncertainty quantification and enables more robust generalization.</li>
+            <li>Probabilities can be used to explore the latent space, allowing for creative tasks like data interpolation or generation.</li>
+            <li class="fragment">Define every symbol: \(p(z|x)\) is the probability of a latent variable \(z\) given input \(x\).</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>KL Divergence and Reparameterization Trick</h2>
+    <div class="cardtitle">Reparameterization Theorem</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The reparameterization trick allows us to compute gradients without explicitly sampling from the latent space distribution.</li>
+            <li>It involves expressing the latent variables as deterministic functions of a set of parameters and their gradients with respect to the inputs.</li>
+            <li class="fragment">Define every symbol: \(z = g(\theta, x)\), where \(\theta\) are parameters and \(g\) is a deterministic function.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>ELBO Derivation</h2>
+    <div class="cardtitle">The ELBO: Expectation of the Log Probability</div>
+    <div class="eqbox fragment">
+        $$\mathcal{L}(x) = \mathbb{E}_{z \sim p(z|x)}[\log p(x|z)] - D_{KL}[q(z|x) || p(z)]$$
+    </div>
+    <ul class="pts fragment">
+        <li>The ELBO is a lower bound on the log-likelihood of the data.</li>
+        <li>It balances the reconstruction loss and the KL divergence to encourage the latent space to be similar to the prior distribution \(p(z)\).</li>
+        <li class="fragment">Define every symbol: \(x\) is the input, \(z\) is the latent variable, \(q(z|x)\) is the approximate posterior, and \(D_{KL}\) is the Kullback-Leibler divergence.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Complete VAE Architecture</h2>
+    <div class="cardtitle">Building a Variational Autoencoder</div>
+    <div class="duo">
+        <div style="width: 48%;">
+            <h3>Encoder</h3>
+            <ul class="pts">
+                <li>The encoder takes an input \(x\) and maps it to the latent space using a probabilistic model.</li>
+                <li class="fragment">Define every symbol: \(\mu(z|x)\) is the mean, \(\sigma(z|x)\) is the standard deviation of the Gaussian distribution \(p(z|x)\).</li>
+            </ul>
+        </div>
+        <div style="width: 48%;">
+            <h3>Decoder</h3>
+            <ul class="pts">
+                <li>The decoder takes a latent variable \(z\) and maps it back to the original input dimensions.</li>
+                <li class="fragment">Define every symbol: \(p(x|z)\) is the conditional probability of the reconstruction.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Full VAE Loss Function</h2>
+    <div class="cardtitle>The Full Objective Function</div>
+    <div class="eqbox hero fragment">
+        $$\mathcal{L}(x) = \mathbb{E}_{z \sim q(z|x)}[\log p(x|z)] - D_{KL}[q(z|x) || p(z)]$$
+    </div>
+    <ul class="pts fragment">
+        <li>The full VAE loss function combines the reconstruction loss and the KL divergence, driving the model to learn a latent space that captures the essence of the data while maintaining uncertainty.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Summary and Next Steps</h2>
+    <p class="cap">Variational Autoencoders are a powerful tool for learning representations that capture complex patterns in data. Understanding their components, including probabilistic latent spaces, the reparameterization trick, and the ELBO, is essential for building effective models.</p>
+</section>
+
+<section>
+    <h2>Check yourself</h2>
+    <div class="quiz" data-quiz='{
+      "question": "Explain why using a probabilistic latent space in an autoencoder model is beneficial.",
+      "choices": {"A": "It simplifies the learning process by directly optimizing the log likelihood.", "B": "It allows for uncertainty quantification and enables more robust generalization.", "C": "It makes it easier to interpret the encoded representations.", "D": "It reduces the computational cost of training."},
+      "correct": "B",
+      "explanation": "Probabilistic latent spaces allow for uncertainty quantification, which is crucial for making confident predictions.",
+      "hint": "Consider how probabilistic models can capture complex distributions."
+    }'></div>
+</section>
+<!-- SECTIONS END -->
+</div>
+</div>
+<script src="../../framework/vendor/reveal.js"></script>
+<script src="../../framework/vendor/highlight.js"></script>
+<script src="../../framework/vendor/katex/katex.min.js"></script>
+<script src="../../framework/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../framework/js/quiz.js"></script>
+<script src="../../framework/js/net-diagram.js"></script>
+<script src="../../framework/js/sal.js"></script>
+<script>SAL.init();</script>
+</body>
+</html>

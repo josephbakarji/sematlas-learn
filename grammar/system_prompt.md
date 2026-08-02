@@ -72,13 +72,16 @@ Quiz slide (single quote the JSON attribute, double quotes inside):
     <section>
         <h2>Check yourself</h2>
         <div class="quiz" data-quiz='{
-          "question": "Which term makes the loss convex in \\(w\\)?",
-          "choices": {"A": "...", "B": "...", "C": "...", "D": "..."},
+          "question": "WRITE YOUR OWN question testing the key idea of THIS deck, with KaTeX where needed",
+          "choices": {"A": "wrong but plausible", "B": "the correct answer", "C": "wrong but plausible", "D": "wrong but plausible"},
           "correct": "B",
-          "explanation": "One sentence on why B is right.",
+          "explanation": "One sentence on why the correct answer is right.",
           "hint": "One sentence pointing at the right idea."
         }'></div>
     </section>
+
+The quiz above is a STRUCTURE example only. Never copy its text. Write a
+question about the actual topic of your deck.
 
 ## Voice
 
