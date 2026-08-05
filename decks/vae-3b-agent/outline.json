@@ -1,0 +1,112 @@
+{
+ "title": "Variational Autoencoders: A Comprehensive Introduction",
+ "slides": [
+  {
+   "title": "Introduction to Variational Autoencoders (VAEs)",
+   "goal": "Understand the basics of VAEs, including their components and how they work.",
+   "type": "title"
+  },
+  {
+   "title": "What is an Autoencoder?",
+   "goal": "Define what an autoencoder is and its core components.",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*}\n&\\text{Autoencoder} = (\\text{Encoder}, \\text{Decoder})\\\\\n&\\text{Encoder}: x \\rightarrow z\\\\\n&\\text{Decoder}: z \\rightarrow y\\\\\n&z \\in \\mathcal{Z}, \\; y \\in \\mathcal{Y}\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "x",
+    "y",
+    "z"
+   ]
+  },
+  {
+   "title": "Latent Space",
+   "goal": "Understand the latent space and why it's important.",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*}\n&\\text{Latent Space}: z\\\\\n&z \\in \\mathcal{Z}, \\; |z| < \\infty\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "z"
+   ]
+  },
+  {
+   "title": "Reconstruction Loss",
+   "goal": "Understand the reconstruction loss and why it's crucial.",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*}\n&\\text{Reconstruction Loss}: \\mathcal{L}_\\text{rec}(y, x) = D(y, g(z)),\\\\\n&D(y, g(z)) = -\\int_{y} p(y|z) \\log(p(y|x)) dy\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "y",
+    "x",
+    "g",
+    "p"
+   ]
+  },
+  {
+   "title": "Why Make the Latent Space Probabilistic?",
+   "goal": "Understand why we make the latent space probabilistic.",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*}\n&\\text{Probabilistic Latent Space}: p(z|x)\\\\\n&z \\in \\mathcal{Z}, \\; |z| < \\infty\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "p"
+   ]
+  },
+  {
+   "title": "KL Divergence",
+   "goal": "Understand the KL divergence and its role in VAEs.",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*}\n&\\text{KL Divergence}: \\mathcal{L}_\\text{KL}(p(z|x), q(z|x)) = -\\int_{z} p(z|x) \\log(\\frac{q(z|x)}{p(z|x)}) dz\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "KLDivergence"
+   ]
+  },
+  {
+   "title": "Reparameterization Trick",
+   "goal": "Understand the reparameterization trick and its importance.",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*}\n&q(z|x) = \\mathcal{N}(\\mu, \\sigma^2),\\\\\n&z = \\mu + \\sqrt{\\sigma^2} \\cdot \\epsilon, \\; \\epsilon \\sim \\mathcal{N}(0, 1)\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "q",
+    "z",
+    "mu",
+    "sigma",
+    "epsilon"
+   ]
+  },
+  {
+   "title": "Derivation of the ELBO",
+   "goal": "Derive the Evidence Lower Bound (ELBO) in VAEs.",
+   "type": "equation",
+   "equations": [
+    "\\begin{align*}\n&\\mathcal{L}(p(z|x), q(z|x)) = \\mathcal{L}_\\text{rec}(y, x) + \\mathcal{L}_\\text{KL}(q(z|x), p(z|x))\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "ELBO"
+   ]
+  },
+  {
+   "title": "Full VAE Loss and Architecture",
+   "goal": "Understand the full VAE loss and its architecture.",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*}\n&\\text{VAE Loss}: \\mathcal{L}(x) = \\mathcal{L}_\\text{rec}(y, x) + \\mathcal{L}_\\text{KL}(q(z|x), p(z|x))\\\\\n&\\text{Architecture}: (\\text{Encoder}, \\text{Decoder})\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "VAELoss"
+   ]
+  },
+  {
+   "title": "Quiz",
+   "goal": "Test your understanding of the key concepts in VAEs.",
+   "type": "quiz"
+  }
+ ]
+}

@@ -1,0 +1,91 @@
+{
+ "title": "Variational Autoencoders (VAEs)",
+ "slides": [
+  {
+   "title": "Introduction to Autoencoders",
+   "goal": "Understand what an autoencoder is and its components.",
+   "type": "title",
+   "equations": [],
+   "symbols_to_define": [
+    "autoencoder",
+    "encoder",
+    "decoder"
+   ]
+  },
+  {
+   "title": "Encoder and Decoder",
+   "goal": "Learn how the encoder maps input data to the latent space, and how the decoder reconstructs data from this latent space.",
+   "type": "concept",
+   "equations": [],
+   "symbols_to_define": [
+    "input",
+    "latent_space"
+   ]
+  },
+  {
+   "title": "Why Probabilistic Latent Space?",
+   "goal": "Understand why making the latent space probabilistic is beneficial.",
+   "type": "concept",
+   "equations": [],
+   "symbols_to_define": [
+    "prior",
+    "posterior"
+   ]
+  },
+  {
+   "title": "KL Divergence",
+   "goal": "Learn about KL divergence and its role in VAEs.",
+   "type": "concept",
+   "equations": [
+    "\\text{KL}(q(z|x)||p(z))"
+   ],
+   "symbols_to_define": [
+    "KL",
+    "q",
+    "p"
+   ]
+  },
+  {
+   "title": "Reparameterization Trick",
+   "goal": "Understand the reparameterization trick and how it simplifies optimization.",
+   "type": "concept",
+   "equations": [],
+   "symbols_to_define": [
+    "reparameterization trick"
+   ]
+  },
+  {
+   "title": "Derivation of ELBO",
+   "goal": "Carefully derive the Evidence Lower Bound (ELBO) in a VAE.",
+   "type": "concept",
+   "equations": [
+    "\\text{ELBO} = \\mathbb{E}_{q(z|x)}[\\log p(x|z)] - D_{KL}(q(z|x)||p(z))",
+    "\\log p(x|z) = -\\frac{1}{2}||x - g(z)||^2 + const"
+   ],
+   "symbols_to_define": [
+    "ELBO",
+    "D_KL",
+    "g"
+   ]
+  },
+  {
+   "title": "Full VAE Loss and Architecture",
+   "goal": "Understand the full VAE loss function and its architecture.",
+   "type": "concept",
+   "equations": [
+    "\\text{VAE loss} = \\mathbb{E}_{q(z|x)}[\\log p(x|z)] - D_{KL}(q(z|x)||p(z)) + const"
+   ],
+   "symbols_to_define": [
+    "VAE",
+    "loss"
+   ]
+  },
+  {
+   "title": "Summary",
+   "goal": "Summarize the key concepts of VAEs.",
+   "type": "concept",
+   "equations": [],
+   "symbols_to_define": []
+  }
+ ]
+}

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variational Autoencoders (VAEs)</title>
+    <link rel="stylesheet" href="../../framework/vendor/reset.css">
+    <link rel="stylesheet" href="../../framework/vendor/reveal.css">
+    <link rel="stylesheet" href="../../framework/vendor/night.css">
+    <link rel="stylesheet" href="../../framework/vendor/monokai.css">
+    <link rel="stylesheet" href="../../framework/vendor/katex/katex.min.css">
+    <link rel="stylesheet" href="../../framework/vendor/fonts/fonts.css">
+    <link rel="stylesheet" href="../../framework/css/sal.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<!-- SECTIONS START -->
+<section>
+    <p class="kicker">Introduction to Machine Learning</p>
+    <h1>Autoencoders</h1>
+    <p class="t-line">Discover the basics of autoencoders, their components, and how they work.</p>
+</section>
+
+<section>
+    <h2>Encoder and Decoder</h2>
+    <div class="cardtitle">The components of an autoencoder</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The encoder takes the input data \( x \) and maps it to a latent space representation \( z \).</li>
+            <li>Latent space: a continuous vector representing the underlying structure or information in the data.</li>
+            <li class="fragment">The decoder takes the latent space representation \( z \) and reconstructs the original input data \( x' \).</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Why Probabilistic Latent Space?</h2>
+    <div class="cardtitle">The benefits of probabilistic latent space</div>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>The encoder learns a distribution over the latent space, not just a single point.</li>
+            <li>Latent distributions can capture complex patterns and dependencies in the data.<br><span class="fragment">For example, a probabilistic model might learn that certain classes are more likely to be close together in the latent space than others.</span></li>
+            <li>Probabilistic models provide uncertainty estimates, aiding robustness to noise.<br><span class="fragment">This means that we can use the probability distribution of the latent space to understand how uncertain our model is about a given input.</span></li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>The role of KL Divergence</h2>
+    <div class="cardtitle">KL Divergence in VAEs</div>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>KL divergence measures the difference between two probability distributions.</li>
+            <li>\(\text{KL}(q(z|x)||p(z))\) is the KL divergence between the posterior distribution \(q(z|x)\) and the prior distribution \(p(z)\).</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$\text{KL}(q(z|x)||p(z)) = \int q(z|x) \log \frac{q(z|x)}{p(z)} dz$$
+        </div>
+        <ul class="pts fragment">
+            <li>The KL divergence is non-negative: \(\text{KL}(q(z|x)||p(z)) \geq 0\).</li>
+            <li>It encourages the encoder to produce distributions that are close to the prior, which helps in capturing more complex patterns.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>The Reparameterization Trick</h2>
+    <div class="cardtitle">The twist in the VAE</div>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>We want to sample from a distribution \(q(z|x)\) that is easy to sample from, but we can't.</li>
+        </ul>
+        <div class="eqbox hero fragment">
+            $$z = \mu(x) + \sigma(x) \cdot \epsilon$$
+        </div>
+        <ul class="pts fragment">
+            <li>\(\mu(x)\) is the mean of the latent space, and \(\sigma(x)\) is the standard deviation.</li>
+            <li>\(\epsilon\) is a random sample from a standard normal distribution \(N(0, 1)\).</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Derivation of ELBO</h2>
+    <div class="cardtitle">The derivation process</div>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>The Evidence Lower Bound (ELBO) is a key concept in variational autoencoders.</li>
+            <li>It quantifies how well the latent representation \( z \) encodes the data \( x \).</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$\text{ELBO} = \mathbb{E}_{q(z|x)}[\log p(x|z)] - D_{KL}(q(z|x)||p(z))$$
+        </div>
+        <ul class="pts fragment">
+            <li>The first term in the ELBO is the expected log-likelihood of the data given the latent representation.</li>
+            <li>It measures how well the decoder can reconstruct the input data from the encoded latent vector \( z \).</li>
+            <li>We define a simple reconstruction loss: $$\log p(x|z) = -\frac{1}{2}||x - g(z)||^2 + const$$</li>
+            <li>Here, \( g(z) \) is the decoder function that maps the latent vector to the reconstructed data.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>The Full VAE Loss Function</h2>
+    <p class="cardtitle">VAE Architecture</p>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>A \(\text{VAE}\) is a type of autoencoder that makes the latent space probabilistic.</li>
+            <li>The loss function combines reconstruction, KL divergence, and a constant term:</li>
+        </ul>
+        <div class="eqbox hero fragment">
+            $$\text{VAE loss} = \mathbb{E}_{q(z|x)}[\log p(x|z)] - D_{KL}(q(z|x)||p(z)) + const$$
+        </div>
+        <ul class="pts fragment">
+            <li>\(\mathbb{E}_{q(z|x)}[\log p(x|z)]\) is the reconstruction loss.</li>
+            <li> \(D_{KL}(q(z|x)||p(z))\) is the KL divergence term, measuring how close \(q(z|x)\) is to the prior distribution \(p(z)\).</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Summary</h2>
+    <div class="cardtitle">VAE Recap</div>
+    <div class="card">
+        <ul class="pts">
+            <li>An autoencoder is a neural network with an encoder and decoder that encode and decode data points to and from a latent space.</li>
+            <li>The latent space is probabilistic, meaning it represents the distribution of data points in a continuous space.</li>
+            <li>KL divergence measures the difference between two probability distributions.</li>
+            <li>The reparameterization trick allows for backpropagation through the latent space.</li>
+            <li>The ELBO (Evidence Lower Bound) is used to optimize the VAE by maximizing it with respect to the parameters of the encoder and decoder.</li>
+        </ul>
+    </div>
+</section>
+<!-- SECTIONS END -->
+</div>
+</div>
+<script src="../../framework/vendor/reveal.js"></script>
+<script src="../../framework/vendor/highlight.js"></script>
+<script src="../../framework/vendor/katex/katex.min.js"></script>
+<script src="../../framework/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../framework/js/quiz.js"></script>
+<script src="../../framework/js/net-diagram.js"></script>
+<script src="../../framework/js/sal.js"></script>
+<script>SAL.init();</script>
+</body>
+</html>
