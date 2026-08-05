@@ -1,0 +1,14 @@
+{
+ "topic": "variational autoencoders, built up from the simplest components: what an autoencoder is (encoder, decoder, latent space, reconstruction loss), why we make the latent space probabilistic, KL divergence, the reparameterization trick, and a careful derivation of the ELBO, ending with the full VAE loss and architecture",
+ "model": "qwen2.5-coder:3b",
+ "verifier_model": "qwen2.5-coder:14b",
+ "mode": "agentic",
+ "slides_planned": 8,
+ "sections_produced": 8,
+ "llm_calls": 26,
+ "tokens_total": 39341,
+ "wall_seconds": 145.5,
+ "lint_issues": 10,
+ "lint_fixed": 10,
+ "verify_findings": 6
+}

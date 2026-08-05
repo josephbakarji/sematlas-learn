@@ -1,0 +1,95 @@
+{
+ "title": "Variational Autoencoders",
+ "slides": [
+  {
+   "title": "Introduction to Variational Autoencoders (VAE)",
+   "goal": "Understand the basics of variational autoencoders",
+   "type": "title"
+  },
+  {
+   "title": "What is an Autoencoder?",
+   "goal": "Define the components of an autoencoder",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*} E(x) &= \\mathbb{E}_{z \\sim q(z|x)}[\\log p(x|z)] \\\\\nD(x, z) &= D_{KL}(q(z|x)||p(z))\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "x",
+    "y",
+    "z"
+   ]
+  },
+  {
+   "title": "Why Probabilistic Latent Space?",
+   "goal": "Understand the benefits of using a probabilistic latent space",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*} E(x) &= \\mathbb{E}_{z \\sim q(z|x)}[\\log p(x|z)] \\\\\nD(x, z) &= D_{KL}(q(z|x)||p(z))\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "x",
+    "y",
+    "z"
+   ]
+  },
+  {
+   "title": "KL Divergence",
+   "goal": "Understand the KL divergence in the context of variational autoencoders",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*} E(x) &= \\mathbb{E}_{z \\sim q(z|x)}[\\log p(x|z)] \\\\\nD(x, z) &= D_{KL}(q(z|x)||p(z))\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "x",
+    "y",
+    "z"
+   ]
+  },
+  {
+   "title": "Reparameterization Trick",
+   "goal": "Understand the reparameterization trick and its application in variational autoencoders",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*} E(x) &= \\mathbb{E}_{z \\sim q(z|x)}[\\log p(x|z)] \\\\\nD(x, z) &= D_{KL}(q(z|x)||p(z))\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "x",
+    "y",
+    "z"
+   ]
+  },
+  {
+   "title": "ELBO Derivation",
+   "goal": "Derive the Evidence Lower Bound (ELBO) in variational autoencoders",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*} E(x) &= \\mathbb{E}_{z \\sim q(z|x)}[\\log p(x|z)] \\\\\nD(x, z) &= D_{KL}(q(z|x)||p(z))\nL(x) &= E(x) - D(x, z)\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "x",
+    "y",
+    "z"
+   ]
+  },
+  {
+   "title": "Full VAE Loss and Architecture",
+   "goal": "Understand the complete architecture and loss function of variational autoencoders",
+   "type": "concept",
+   "equations": [
+    "\\begin{align*} E(x) &= \\mathbb{E}_{z \\sim q(z|x)}[\\log p(x|z)] \\\\\nD(x, z) &= D_{KL}(q(z|x)||p(z))\nL(x) &= E(x) - D(x, z)\n\\end{align*}"
+   ],
+   "symbols_to_define": [
+    "x",
+    "y",
+    "z"
+   ]
+  },
+  {
+   "title": "Quiz",
+   "goal": "Test understanding of variational autoencoders",
+   "type": "quiz",
+   "equations": [],
+   "symbols_to_define": []
+  }
+ ]
+}

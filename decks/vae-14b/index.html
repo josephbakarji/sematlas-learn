@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variational Autoencoders, Built Up From The Simplest Components: What An Autoencoder Is (Encoder, Decoder, Latent Space, Reconstruction Loss), Why We Make The Latent Space Probabilistic, Kl Divergence, The Reparameterization Trick, And A Careful Derivation Of The Elbo, Ending With The Full Vae Loss And Architecture</title>
+    <link rel="stylesheet" href="../../framework/vendor/reset.css">
+    <link rel="stylesheet" href="../../framework/vendor/reveal.css">
+    <link rel="stylesheet" href="../../framework/vendor/night.css">
+    <link rel="stylesheet" href="../../framework/vendor/monokai.css">
+    <link rel="stylesheet" href="../../framework/vendor/katex/katex.min.css">
+    <link rel="stylesheet" href="../../framework/vendor/fonts/fonts.css">
+    <link rel="stylesheet" href="../../framework/css/sal.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<!-- SECTIONS START -->
+<section>
+    <p class="kicker">Machine Learning</p>
+    <h1>Variational Autoencoders (VAEs)</h1>
+    <p class="t-line">Understanding the components and math behind VAEs.</p>
+</section>
+
+<section>
+    <h2>What is an autoencoder?</h2>
+    <div class="cardtitle">The basics</div>
+    <div class="card">
+        <ul class="pts">
+            <li>An autoencoder is a type of neural network used for unsupervised learning.</li>
+            <li class="fragment">It consists of two main parts: an encoder and a decoder.</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$\text{Encoder}: \mathbf{x} \rightarrow \mathbf{z}$$
+            $$\text{Decoder}: \mathbf{z} \rightarrow \hat{\mathbf{x}}$$
+        </div>
+        <ul class="pts fragment">
+            <li>\(\mathbf{x}\) is the input data, \(\mathbf{z}\) is the latent representation, and \(\hat{\mathbf{x}}\) is the reconstructed output.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Reconstruction Loss</h2>
+    <div class="cardtitle">Measuring performance</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The reconstruction loss measures how well the decoder reconstructs the input data.</li>
+            <li class="fragment">Commonly, it is defined as the mean squared error (MSE) between \(\mathbf{x}\) and \(\hat{\mathbf{x}}\).</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$\text{Reconstruction Loss} = \frac{1}{N} \sum_{i=1}^{N} \| \mathbf{x}_i - \hat{\mathbf{x}}_i \|_2^2$$
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Why probabilistic latent space?</h2>
+    <div class="cardtitle">The problem with deterministic spaces</div>
+    <div class="card">
+        <ul class="pts">
+            <li>Deterministic latent representations can lead to poor generalization.</li>
+            <li class="fragment">Probabilistic latent spaces allow for more robust and flexible models.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>KL Divergence</h2>
+    <div class="cardtitle">Measuring the difference between distributions</div>
+    <div class="card">
+        <ul class="pts">
+            <li>KL divergence measures how one probability distribution diverges from a second, expected probability distribution.</li>
+            <li class="fragment">It is defined as:</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$D_{\text{KL}}(P \parallel Q) = \sum_{x} P(x) \log \frac{P(x)}{Q(x)}$$
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>The Reparameterization Trick</h2>
+    <div class="cardtitle">Enabling gradient descent</div>
+    <div class="card">
+        <ul class="pts">
+            <li>Directly sampling from a latent distribution can be problematic for backpropagation.</li>
+            <li class="fragment">The reparameterization trick allows us to sample in a differentiable manner.</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$\mathbf{z} = \mu + \sigma \odot \epsilon$$
+        </div>
+        <ul class="pts fragment">
+            <li>\(\mu\) and \(\sigma\) are the mean and standard deviation, respectively.</li>
+            <li>\(\epsilon\) is a sample from a standard normal distribution.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Deriving the Evidence Lower Bound (ELBO)</h2>
+    <div class="cardtitle">Connecting reconstruction and KL divergence</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The ELBO is a lower bound on the log-likelihood of the data.</li>
+            <li class="fragment">It balances the reconstruction loss with the KL divergence between the latent distribution and a prior.</li>
+        </ul>
+        <div class="eqbox hero fragment">
+            $$\text{ELBO} = \mathbb{E}_{q(\mathbf{z}|\mathbf{x})}[\log p(\mathbf{x}|\mathbf{z})] - D_{\text{KL}}(q(\mathbf{z}|\mathbf{x}) \parallel p(\mathbf{z}))$$
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>VAE Loss Function</h2>
+    <div class="cardtitle">Putting it all together</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The VAE loss function consists of two main terms: the reconstruction loss and the KL divergence.</li>
+            <li class="fragment">The total loss is given by:</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$\mathcal{L}(\mathbf{x}) = \text{Reconstruction Loss} + \beta D_{\text{KL}}(q(\mathbf{z}|\mathbf{x}) \parallel p(\mathbf{z}))$$
+        </div>
+        <ul class="pts fragment">
+            <li>\(\beta\) is a hyperparameter that balances the two terms.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>VAE Architecture</h2>
+    <div class="cardtitle">The full model</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The encoder network maps input data \(\mathbf{x}\) to parameters of a latent distribution.</li>
+            <li class="fragment">The decoder network reconstructs the data from the sampled latent variable \(\mathbf{z}\).</li>
+            <li class="fragment">Both networks are typically fully connected layers.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Training a VAE</h2>
+    <div class="cardtitle">Minimizing the loss</div>
+    <div class="card">
+        <ul class="pts">
+            <li>VAEs are trained by minimizing the total loss function.</li>
+            <li class="fragment">Gradient descent is used to update the weights of both the encoder and decoder networks.</li>
+            <li class="fragment">The reparameterization trick ensures that gradients can flow through the sampling step.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Applications of VAEs</h2>
+    <div class="cardtitle">Where it's used</div>
+    <div class="card">
+        <ul class="pts">
+            <li>VAEs are widely used in generative modeling, such as generating images and text.</li>
+            <li class="fragment">They can also be used for data compression, anomaly detection, and representation learning.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Limitations of VAEs</h2>
+    <div class="cardtitle">What to watch out for</div>
+    <div class="card">
+        <ul class="pts">
+            <li>VAEs can suffer from issues like mode collapse, where they generate a limited variety of outputs.</li>
+            <li class="fragment">They may also struggle with capturing complex data distributions.</li>
+            <li class="fragment">Training VAEs requires careful tuning of hyperparameters and architectures.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Summary</h2>
+    <div class="cardtitle">Key takeaways</div>
+    <div class="card">
+        <ul class="pts">
+            <li>A VAE is a generative model that learns to encode and decode data through a probabilistic latent space.</li>
+            <li class="fragment">The ELBO loss function balances reconstruction accuracy with the smoothness of the latent distribution.</li>
+            <li class="fragment">VAEs have wide applications but come with their own set of challenges.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Check yourself</h2>
+    <div class="quiz" data-quiz='{
+      "question": "What is the purpose of the reparameterization trick in VAEs?",
+      "choices": {"A": "To improve reconstruction accuracy", "B": "To enable gradient descent through sampling", "C": "To reduce the complexity of the model", "D": "To increase the KL divergence"},
+      "correct": "B",
+      "explanation": "The reparameterization trick allows gradients to flow through the sampling step, making it possible to use backpropagation in training VAEs.",
+      "hint": "Think about how gradient descent works and what makes sampling problematic for backprop."
+    }'></div>
+</section>
+<!-- SECTIONS END -->
+</div>
+</div>
+<script src="../../framework/vendor/reveal.js"></script>
+<script src="../../framework/vendor/highlight.js"></script>
+<script src="../../framework/vendor/katex/katex.min.js"></script>
+<script src="../../framework/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../framework/js/quiz.js"></script>
+<script src="../../framework/js/net-diagram.js"></script>
+<script src="../../framework/js/sal.js"></script>
+<script>SAL.init();</script>
+</body>
+</html>

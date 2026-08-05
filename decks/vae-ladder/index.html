@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variational Autoencoders</title>
+    <link rel="stylesheet" href="../../framework/vendor/reset.css">
+    <link rel="stylesheet" href="../../framework/vendor/reveal.css">
+    <link rel="stylesheet" href="../../framework/vendor/night.css">
+    <link rel="stylesheet" href="../../framework/vendor/monokai.css">
+    <link rel="stylesheet" href="../../framework/vendor/katex/katex.min.css">
+    <link rel="stylesheet" href="../../framework/vendor/fonts/fonts.css">
+    <link rel="stylesheet" href="../../framework/css/sal.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<!-- SECTIONS START -->
+<section>
+    <p class="kicker">Machine Learning, Data Compression</p>
+    <h1>Variational Autoencoders (VAE)</h1>
+    <p class="t-line">An introduction to the basics of VAEs.</p>
+</section>
+
+<section>
+    <h2>What is an Autoencoder?</h2>
+    <div class="cardtitle">Components of an Autoencoder</div>
+    <div class="card">
+        <ul class="pts">
+            <li>Autoencoders are unsupervised learning models that learn to compress and decompress data.</li>
+            <li class="fragment">They consist of two main parts: the encoder and decoder.</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$x = E(x)$$
+        </div>
+        <ul class="pts fragment">
+            <li>The encoder maps an input \(x\) to a latent space representation \(z\).</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$E[x] = \mathbb{E}_{x \sim p(x)}[x]$$
+        </div>
+        <ul class="pts fragment">
+            <li>The decoder maps the latent space representation \(z\) back to a reconstructed input \(x\).</li>
+            <li>KL divergence measures the difference between two probability distributions.</li>
+            <li>The goal of an autoencoder is to minimize the reconstruction loss and KL divergence.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Why Probabilistic Latent Space?</h2>
+    <div class="cardtitle">The benefits of using a probabilistic latent space</div>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>A probabilistic latent space allows the model to capture uncertainty and variability.</li>
+        </ul>
+        <ul class="pts fragment">
+            <li>It enables the autoencoder to learn complex, non-linear relationships in the data by modeling the posterior distribution of the latent variables.</li>
+        </ul>
+        <ul class="pts fragment">
+            <li>This can lead to better generalization and robustness to noise and outliers.</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$E(x) = \mathbb{E}_{z \sim q(z|x)}[\log p(x|z)]$$
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>KL Divergence</h2>
+    <div class="cardtitle">The KL divergence</div>
+    <div class="card">
+        <ul class="pts">
+            <li>The expectation of the log likelihood of a sample \(x\) under the decoder distribution, given its latent variable \(z\): \(E(x) = \mathbb{E}_{z \sim q(z|x)}[\log p(x|z)]\).</li>
+            <li>KL divergence between the decoder's distribution and the prior distribution over the latent space: \(D(x, z) = D_{KL}(q(z|x)||p(z))\).</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$E(x) = \mathbb{E}_{z \sim q(z|x)}[\log p(x|z)]$$
+        </div>
+        <div class="eqbox hero fragment">
+            $$D(x, z) = D_{KL}(q(z|x)||p(z))$$
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>The reparameterization trick</h2>
+    <div class="cardtitle">The idea</div>
+    <div class="card">
+        <ul class="pts fragment">
+            <li>A common problem in autoencoders is that the latent space distribution \(q(z|x)\) is not known and must be estimated.</li>
+            <li>The reparameterization trick allows us to sample from this distribution without needing to know it explicitly, thus simplifying training.</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$E(x) = \mathbb{E}_{z \sim q(z|x)}[\log p(x|z)]$$
+        </div>
+        <ul class="pts fragment">
+            <li>The expectation is taken over the latent variable \(z\) sampled from the distribution \(q(z|x)\).</li>
+            <li>\(\log p(x|z)\) is the log likelihood of observing the input data \(x\) given the latent variable \(z\).</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$D_{KL}(q(z|x)||p(z))$$
+        </div>
+        <ul class="pts fragment">
+            <li>The Kullback-Leibler divergence measures the difference between two probability distributions.</li>
+            <li>In this context, it compares the distribution \(q(z|x)\) to the prior distribution \(p(z)\).</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Deriving the ELBO</h2>
+    <div class="cardtitle">The derivation of the Evidence Lower Bound (ELBO)</div>
+    <div class="card">
+        <p class="pts fragment">In variational autoencoders, the goal is to learn a latent representation \(z\) that can reconstruct input data \(x\).</p>
+        <div class="eqbox fragment">
+            $$E(x) = \mathbb{E}_{z \sim q(z|x)}[\log p(x|z)]$$
+        </div>
+        <ul class="pts fragment">
+            <li>Here, \(E(x)\) is the expected log-likelihood of the data given the latent variable.</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$D(x, z) = D_{KL}(q(z|x)||p(z))$$
+        </div>
+        <ul class="pts fragment">
+            <li>This is the Kullback-Leibler divergence between the approximate posterior \(q(z|x)\) and the prior \(p(z)\).</li>
+            <li>It measures how far apart the two distributions are.</li>
+        </ul>
+        <div class="eqbox hero fragment">
+            $$L(x) = \mathbb{E}_{z \sim q(z|x)}[\log p(x|z)] + D_{KL}(q(z|x)||p(z))$$
+        </div>
+        <ul class="pts fragment">
+            <li>The ELBO is a lower bound on the log-likelihood of the data given the model.</li>
+            <li>It encourages the latent representation \(z\) to be close to the true latent distribution \(p(z)\).</li>
+            <li>The goal of training a VAE is to maximize the ELBO, which in turn maximizes the likelihood of the observed data.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>The Complete VAE Architecture</h2>
+    <div class="cardtitle">The architecture and loss function of variational autoencoders</div>
+    <div class="card">
+        <ul class="pts">
+            <li>VAEs are a type of probabilistic encoder-decoder model that learn to compress data into latent spaces.</li>
+            <li>The latent space is probabilistic, meaning it can represent different states with varying probabilities.</li>
+            <li>The key components of a VAE include:</li>
+        </ul>
+        <div class="eqbox fragment">
+            $$x \in \mathcal{X}$$
+        </div>
+        <ul class="pts fragment">
+            <li>Encoder: Maps input data \(x\) to a latent space \(z\).</li>
+            <div class="eqbox fragment">
+                $$q(z|x) = \mathcal{N}(z | \mu(x), \sigma^2(x))$$
+            </div>
+            <ul class="pts fragment">
+                <li>\(\mu(x)\) and \(\sigma^2(x)\) are learned parameters of the encoder.</li>
+            </ul>
+        </ul>
+        <div class="eqbox fragment">
+            $$z \in \mathcal{Z}$$
+        </div>
+        <ul class="pts fragment">
+            <li>Decoder: Maps latent space \(z\) back to reconstructed data \(y\).</li>
+            <div class="eqbox fragment">
+                $$p(y|z) = \mathcal{N}(y | f(z), \sigma_y^2)$$
+            </div>
+            <ul class="pts fragment">
+                <li>\(f(z)\) and \(\sigma_y^2\) are learned parameters of the decoder.</li>
+            </ul>
+        </ul>
+        <div class="eqbox fragment">
+            $$y \in \mathcal{Y}$$
+        </div>
+        <ul class="pts fragment">
+            <li>The loss function \(L(x)\) is defined as:</li>
+        </ul>
+        <div class="eqbox hero fragment">
+            $$L(x) = \mathbb{E}_{z \sim q(z|x)}[\log p(x|z)] + D_{KL}(q(z|x)||p(z))$$
+        </div>
+        <ul class="pts fragment">
+            <li>The reconstruction loss \(E(x)\) measures the discrepancy between the original data \(x\) and its reconstructed version \(y\).</li>
+            <li>The KL divergence \(D_{KL}(q(z|x)||p(z))\) encourages the latent space distribution to be close to a standard normal distribution, promoting smoothness.</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Check yourself</h2>
+    <div class="quiz" data-quiz='{
+        "question": "What is the purpose of introducing a probabilistic latent space in an autoencoder?",
+        "choices": {"A": "To make the model more interpretable", "B": "To enable learning from limited data", "C": "To speed up training", "D": "To reduce noise"},
+        "correct": "B",
+        "explanation": "Making the latent space probabilistic allows the autoencoder to learn a distribution over possible representations, enabling it to generalize better from limited data.",
+        "hint": "Consider how probabilistic latent spaces can help with uncertainty quantification."
+    }'></div>
+</section>
+<!-- SECTIONS END -->
+</div>
+</div>
+<script src="../../framework/vendor/reveal.js"></script>
+<script src="../../framework/vendor/highlight.js"></script>
+<script src="../../framework/vendor/katex/katex.min.js"></script>
+<script src="../../framework/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../framework/js/quiz.js"></script>
+<script src="../../framework/js/net-diagram.js"></script>
+<script src="../../framework/js/sal.js"></script>
+<script>SAL.init();</script>
+</body>
+</html>
