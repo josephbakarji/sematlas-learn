@@ -48,6 +48,29 @@ your data, your machine. Creation is private and local; sharing is a separate
 social layer, added later. Design for the relationship between the person and
 the model, not for maximal intelligence.
 
+## Relationship to LearnSlides (the official deployment)
+
+This open framework and the LearnSlides app are siblings with distinct jobs:
+
+- **This repo** (GitHub Pages): the open framework. Grammar, adapter,
+  experiments, and generated decks. Static, serverless, forkable. Also the
+  testing ground: new decks and grammar changes land here first.
+- **LearnSlides** (learn.sematlas.com, hosted on Render): the official
+  course deployment. Accounts, live quizzes with results, slide-aware chat,
+  the author's courses. Decks graduate there once they are ready for
+  students.
+
+Coordination rules:
+
+1. The grammar (SLIDE_RULEBOOK.md, SLIDE_TEMPLATES.md) is canonical HERE in
+   `grammar/`. LearnSlides carries mirrors, refreshed by its
+   `scripts/sync_grammar.sh`.
+2. Decks convert between the two formats with `scripts/deck_paths.py`
+   (`to-learnslides` / `from-learnslides`): the only difference is where
+   shared assets live.
+3. learn.sematlas.com belongs to the LearnSlides app. This repo's public
+   home is its GitHub Pages URL.
+
 ## Status
 
 Early. The grammar, seed decks, and adapter work end to end. Not yet built:
