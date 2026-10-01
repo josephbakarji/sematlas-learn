@@ -1,0 +1,68 @@
+{
+ "version": 1,
+ "decks": [
+  {
+   "id": "federalist",
+   "question": "Who wrote the twelve disputed Federalist Papers?",
+   "answer": "Madison, for eleven of them with overwhelming odds; No. 55 is the hard case, as in Mosteller and Wallace (1964).",
+   "url": "https://josephbakarji.github.io/sematlas-learn/decks/federalist/",
+   "teaches": [
+    "generative-model",
+    "naive-bayes",
+    "maximum-likelihood",
+    "laplace-smoothing",
+    "gda",
+    "discriminative-model"
+   ],
+   "needs": [
+    "bayes-rule",
+    "multivariate-gaussian",
+    "logistic-regression"
+   ],
+   "spine": [
+    {
+     "part": "The mystery",
+     "question": "Who wrote the twelve disputed papers?",
+     "anchor": "roadmap"
+    },
+    {
+     "part": "Each author is a die",
+     "question": "How would each of them write a paper?",
+     "anchor": "part-2"
+    },
+    {
+     "part": "Run the story backwards",
+     "question": "Given a paper, which die rolled it?",
+     "anchor": "part-3"
+    },
+    {
+     "part": "Two numbers instead of seventy",
+     "question": "What if the features are continuous?",
+     "anchor": "part-4"
+    },
+    {
+     "part": "Generative or discriminative?",
+     "question": "Which learns faster from few examples?",
+     "anchor": "part-5"
+    }
+   ],
+   "data": [
+    {
+     "what": "counts of Mosteller and Wallace's 70 function words in each of the 85 papers",
+     "source": "Project Gutenberg eBook 1404; authorship as in Mosteller and Wallace (1964)",
+     "licence": "public domain"
+    },
+    {
+     "what": "the first 70 words of each paper",
+     "source": "Project Gutenberg eBook 1404",
+     "licence": "public domain"
+    }
+   ],
+   "licence": {
+    "code": "MIT",
+    "deck": "CC BY-SA 4.0"
+   }
+  }
+ ],
+ "moves": {}
+}

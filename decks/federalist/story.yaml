@@ -1,14 +1,24 @@
 # A story deck: one question, one dataset, one notation, written before the first slide.
-question: Who wrote the twelve disputed Federalist Papers?
-answer: Madison, for eleven of them with overwhelming odds; No. 55 is the hard case, as in Mosteller and Wallace (1964).
+question: "Who wrote the twelve disputed Federalist Papers?"
+answer: "Madison, for eleven of them with overwhelming odds; No. 55 is the hard case, as in Mosteller and Wallace (1964)."
 teaches: [generative-model, naive-bayes, maximum-likelihood, laplace-smoothing, gda, discriminative-model]
 needs: [bayes-rule, multivariate-gaussian, logistic-regression]
 spine:
-  - {part: The mystery, question: Who wrote the twelve disputed papers?}
-  - {part: Each author is a die, question: How would each of them write a paper?}
-  - {part: Run the story backwards, question: Given a paper, which die rolled it?}
-  - {part: Two numbers instead of seventy, question: What if the features are continuous?}
-  - {part: Generative or discriminative?, question: Which learns faster from few examples?}
+  - part: "The mystery"
+    question: "Who wrote the twelve disputed papers?"
+    anchor: "roadmap"
+  - part: "Each author is a die"
+    question: "How would each of them write a paper?"
+    anchor: "part-2"
+  - part: "Run the story backwards"
+    question: "Given a paper, which die rolled it?"
+    anchor: "part-3"
+  - part: "Two numbers instead of seventy"
+    question: "What if the features are continuous?"
+    anchor: "part-4"
+  - part: "Generative or discriminative?"
+    question: "Which learns faster from few examples?"
+    anchor: "part-5"
 notation:
   y: the author, 1 for Madison, 0 for Hamilton
   k: one of the 70 function words
