@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who Wrote the Federalist Papers?</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@6/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@6/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@6/dist/theme/night.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@6/dist/plugin/highlight/monokai.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="kit/deck-kit.css">
+    <style>
+        :root {
+            --bg-deep: #0d1017;
+            --accent-blue: #61afef; --accent-green: #98c379; --accent-yellow: #e5c07b;
+            --accent-red: #e06c75; --accent-purple: #c678dd; --accent-cyan: #56b6c2;
+            --accent-orange: #d19a66; --ink-muted: #8a919e; --ink-faint: #4a5261;
+        }
+        .reveal-viewport { background: var(--bg-deep); }
+        .reveal { font-size: 30px; font-family: 'DM Sans', -apple-system, sans-serif; }
+        .reveal h1, .reveal h2, .reveal h3 {
+            font-family: 'Newsreader', Georgia, serif; text-transform: none; font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+        .reveal h1 { font-size: 1.7em; }
+        .reveal h2 { font-size: 1.25em; color: var(--accent-blue); margin-bottom: 0.6em; }
+        .reveal h3 { font-size: 1.0em; color: var(--accent-purple); }
+        .reveal .slides section { text-align: left; }
+        .reveal .slides section.centered { text-align: center; }
+        .small-text { font-size: 21.6px; }
+        .tiny-text { font-size: 17.4px; }
+        .muted { color: var(--ink-muted); }
+        .keyword { color: var(--accent-blue); font-weight: 600; }
+
+        .box-b { position: relative; border: 1px solid rgba(97,175,239,0.32); border-radius: 10px;
+                 padding: 0.72em 0.9em 0.52em; margin: 0.85em 0 0.4em; background: transparent; }
+        .box-b > .tab { position: absolute; top: -0.7em; left: 16px; background: var(--bg-deep);
+                 padding: 0 9px; font-family: 'JetBrains Mono', monospace; font-size: 0.5em;
+                 font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+                 color: var(--accent-blue); white-space: nowrap; }
+        .box-b.green  { border-color: rgba(152,195,121,0.32); } .box-b.green > .tab  { color: var(--accent-green); }
+        .box-b.red    { border-color: rgba(224,108,117,0.32); } .box-b.red > .tab    { color: var(--accent-red); }
+        .box-b.yellow { border-color: rgba(229,192,123,0.32); } .box-b.yellow > .tab { color: var(--accent-yellow); }
+
+        .key-k1 { position: relative; border: 1px solid rgba(152,195,121,0.45); border-radius: 12px;
+                  padding: 0.8em 1.1em 0.6em; margin: 1em auto 0.4em; text-align: center;
+                  box-shadow: 0 0 22px rgba(152,195,121,0.08) inset, 0 0 14px rgba(152,195,121,0.06); }
+        .key-k1 > .tab { position: absolute; top: -0.72em; left: 50%; transform: translateX(-50%);
+                  background: var(--bg-deep); padding: 0 11px; font-family: 'JetBrains Mono', monospace;
+                  font-size: 0.5em; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+                  color: var(--accent-green); white-space: nowrap; }
+        .key-k1.wide { max-width: 92%; }
+        .key-k2 { background: #6e2a33; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+                  padding: 0.55em 1em; text-align: center; margin: 0.55em auto;
+                  box-shadow: 0 6px 22px rgba(0,0,0,0.5); }
+        .key-k2.blue { background: #274768; }
+
+        .box-c { border-radius: 10px; overflow: hidden; margin: 0.3em 0;
+                 background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); }
+        .box-c > .hdr { background: rgba(97,175,239,0.13); color: #cfdcf2; font-weight: 600;
+                 font-size: 0.62em; letter-spacing: 1.2px; text-transform: uppercase; padding: 0.42em 1em; }
+        .box-c > .bod { padding: 0.5em 0.85em 0.6em; }
+        .box-c.green  > .hdr { background: rgba(152,195,121,0.13); color: #d3e4c4; }
+        .box-c.red    > .hdr { background: rgba(224,108,117,0.13); color: #f0cdd1; }
+        .box-c.yellow > .hdr { background: rgba(229,192,123,0.13); color: #efe0c2; }
+        .box-c ul { display: block; margin: 0 0 0 1em; }
+
+        .aside-rule { border-left: 2px solid var(--ink-faint); padding-left: 0.85em;
+                      color: #9aa3b2; font-style: italic; margin: 0.5em 0; }
+        .eq-box { border: 1px solid rgba(219,228,245,0.18); border-radius: 12px;
+                  padding: 0.45em 0.8em; text-align: center; margin: 0.5em auto; }
+        .two-column { display: flex; gap: 26px; align-items: flex-start; }
+        .two-column > div { flex: 1; min-width: 0; }
+
+        .viz-wrap { text-align: center; }
+        .viz-wrap svg { background: rgba(255,255,255,0.03); border-radius: 12px; }
+        .axis text { fill: #9aa3b2; font-size: 15px; }
+        .axis path, .axis line { stroke: #4a5261; }
+        .axis-label { fill: #cfd6e4; font-size: 17px; font-weight: 600; }
+        .viz-controls { display: flex; gap: 22px; justify-content: center; align-items: center;
+                    margin-top: 8px; font-size: 0.55em; color: #cfd6e4; flex-wrap: wrap; }
+        .viz-controls label { display: flex; align-items: center; gap: 8px; }
+        .viz-controls input[type=range] { width: 150px; accent-color: var(--accent-blue); }
+        .viz-controls .val { font-family: 'JetBrains Mono', monospace; color: var(--accent-yellow);
+                         min-width: 3.2em; display: inline-block; }
+        .btn { background: rgba(97,175,239,0.15); color: #dbe4f5; border: 1px solid rgba(97,175,239,0.4);
+               border-radius: 8px; padding: 4px 14px; font-size: 1em; cursor: pointer; text-decoration: none; }
+        .btn:hover { background: rgba(97,175,239,0.3); }
+        .btn.active { background: rgba(152,195,121,0.25); border-color: var(--accent-green); }
+
+        .reveal pre { width: 88%; margin: 0.5em auto; font-size: 0.62em; line-height: 1.42;
+                      font-family: 'JetBrains Mono', Menlo, monospace;
+                      box-shadow: 0 8px 26px rgba(0,0,0,0.45); }
+        .reveal pre code { border-radius: 10px; padding: 18px 22px; max-height: 560px;
+                           font-family: 'JetBrains Mono', Menlo, monospace; }
+        .link-chips { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin: 0.8em 0; }
+        .link-chips a { font-size: 0.62em; }
+        .box-e { position: relative; padding: 0.5em 0.9em; }
+        .box-e::before, .box-e::after { content: ''; position: absolute; width: 15px; height: 15px; }
+        .box-e::before { top: 0; left: 0; border-top: 2px solid var(--accent-yellow);
+                         border-left: 2px solid var(--accent-yellow); }
+        .box-e::after { bottom: 0; right: 0; border-bottom: 2px solid var(--accent-yellow);
+                        border-right: 2px solid var(--accent-yellow); }
+        .reveal h2 .sub { display: block; font-size: 0.62em; font-weight: 500; color: #e6ebf5; margin-top: 0.15em; }
+    canvas.digits { background: #0d1017; border-radius: 10px; cursor: pointer; }
+    .excerpt { font-family: 'Newsreader', Georgia, serif; font-size: 0.95em; line-height: 1.5; color: #e6ebf5; border-left: 3px solid var(--accent-yellow); padding: 0.2em 0 0.2em 0.8em; min-height: 6.2em; }
+    .notation td { padding: 0.18em 0.6em; vertical-align: top; }
+    .verdict th, .verdict td { padding: 0.2em 0.45em; text-align: center; font-family: 'JetBrains Mono', monospace; }
+    select.pick { background: #161b26; color: #e6ebf5; border: 1px solid #4a5261; border-radius: 6px; font-size: 0.6em; padding: 3px 6px; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section id="start" class="centered">
+    <p class="tiny-text muted" style="letter-spacing: 2px; text-transform: uppercase;">Generative learning</p>
+    <h1 style="margin-top: 0.3em;">Who Wrote the Federalist Papers?</h1>
+    <p class="small-text" style="max-width: 860px; margin: 0.6em auto 0;">Naive Bayes, Gaussian discriminant analysis, and why a model of how the data was made can learn from very little of it.</p>
+</section>
+
+<section id="roadmap" data-part="1" data-part-name="The mystery" data-part-question="Who wrote the twelve disputed papers?">
+    <h2>Five questions for today</h2>
+    <ol class="road"><li><a href="#/roadmap"><span class="rn">1</span><span class="rt">The mystery</span><span class="rq">Who wrote the twelve disputed papers?</span></a></li><li><a href="#/part-2"><span class="rn">2</span><span class="rt">Each author is a die</span><span class="rq">How would each of them write a paper?</span></a></li><li><a href="#/part-3"><span class="rn">3</span><span class="rt">Run the story backwards</span><span class="rq">Given a paper, which die rolled it?</span></a></li><li><a href="#/part-4"><span class="rn">4</span><span class="rt">Two numbers instead of seventy</span><span class="rq">What if the features are continuous?</span></a></li><li><a href="#/part-5"><span class="rn">5</span><span class="rt">Generative or discriminative?</span><span class="rq">Which learns faster from few examples?</span></a></li></ol>
+</section>
+
+<section id="publius" data-previews="generative-model">
+    <h2>Eighty-five essays, one pen name<span class="sub">New York, 1787 and 1788: arguing for the new Constitution, signed "Publius"</span></h2>
+    <div class="two-column" style="gap: 30px; align-items: flex-start;">
+        <div style="flex: 1;">
+            <table class="data-table small-text" style="width: 100%;">
+                <tr><td style="text-align: left; color: var(--accent-blue);">Alexander Hamilton</td><td>51</td></tr>
+                <tr><td style="text-align: left; color: var(--accent-orange);">James Madison</td><td>14</td></tr>
+                <tr><td style="text-align: left;">John Jay</td><td>5</td></tr>
+                <tr><td style="text-align: left;">Hamilton and Madison together</td><td>3</td></tr>
+                <tr><td style="text-align: left;"><b>Claimed by both</b></td><td><b>12</b></td></tr>
+            </table>
+        </div>
+        <div style="flex: 1.2;">
+            <p class="small-text">Days before his fatal duel in 1804, Hamilton left a list of his papers that claimed the twelve. Madison later said they were his. Historians argued for 160 years.</p>
+            <p class="small-text fragment">In 1963, Frederick Mosteller and David Wallace settled it with counting and Bayes' rule. Today we redo their work, and it is the whole of generative learning.</p>
+        </div>
+    </div>
+</section>
+
+<section id="guess">
+    <h2>Can you tell them apart?<span class="sub">The opening of a paper by Hamilton or by Madison. Guess.</span></h2>
+    <p id="guess-text" class="excerpt"></p>
+    <div class="viz-controls" id="guess-btns" style="justify-content: flex-start; gap: 12px;"><button class="btn" data-a="Hamilton">Hamilton</button><button class="btn" data-a="Madison">Madison</button></div>
+    <p class="small-text" id="guess-out"></p>
+    <p class="small-text fragment">Both write long, careful, eighteenth-century sentences about the same constitution. Topic gives little away, and neither does style, read by eye.</p>
+</section>
+
+<section id="small-words" data-uses="feature">
+    <h2>The clue is in the small words<span class="sub">One dot per paper: how often it uses the word, per 1,000 words</span></h2>
+    <svg id="viz-marks" width="700" height="300"></svg>
+    <div class="viz-controls" id="marks-words" style="justify-content: flex-start;"><button class="btn" data-w="upon">upon</button><button class="btn" data-w="on">on</button><button class="btn" data-w="by">by</button><button class="btn" data-w="there">there</button><button class="btn" data-w="also">also</button><button class="btn" data-w="of">of</button></div>
+    <p class="small-text" id="marks-out"></p>
+    <p class="small-text fragment">Words like "upon" and "by" carry no topic, so a writer uses them out of habit. That makes them a fingerprint. Mosteller and Wallace used 70 of them; so do we.</p>
+</section>
+
+<section id="part-2" class="centered part-divider" data-part="2" data-part-name="Each author is a die" data-part-question="How would each of them write a paper?">
+    <p class="part-eyebrow">Part 2 of 5</p>
+    <h1 class="part-title">Each author is a die</h1>
+    <p class="part-q">How would each of them write a paper?</p>
+    <nav class="part-map"></nav>
+</section>
+
+<section id="story" data-defines="generative-model" data-uses="bernoulli">
+    <h2>A story of how a paper gets written<span class="sub">A generative model: a recipe that could have produced the data</span></h2>
+    <div class="two-column" style="gap: 30px; align-items: flex-start;">
+        <div style="flex: 1.1;">
+            <p class="small-text"><b>1.</b> Pick the author: Madison with probability \(\phi_y\), Hamilton otherwise.</p>
+            <p class="small-text"><b>2.</b> Each author owns a 70-sided die, one face per function word. Roll that author's die once for every function word in the paper.</p>
+            <p class="small-text fragment">That is the whole model. It ignores word order and meaning, which is naive, and it is enough.</p>
+        </div>
+        <div class="box-b" style="flex: 1;"><span class="tab">Notation, used all lecture</span>
+            <table class="notation small-text">
+                <tr><td>\(y\)</td><td>the author: 1 for Madison, 0 for Hamilton</td></tr>
+                <tr><td>\(k\)</td><td>one of the 70 function words</td></tr>
+                <tr><td>\(x_t\)</td><td>the \(t\)-th function word of a paper, \(t = 1, \dots, L\)</td></tr>
+                <tr><td>\(\phi_y\)</td><td>\(P(y = 1)\): how likely a paper is Madison's</td></tr>
+                <tr><td>\(\phi_{k \mid y}\)</td><td>\(P(x_t = k \mid y)\): the face \(k\) of author \(y\)'s die</td></tr>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section id="dice" data-uses="generative-model">
+    <h2>The two dice, learned from 65 papers<span class="sub">Each face's probability is a count divided by a total</span></h2>
+    <svg id="viz-dice" width="700" height="330"></svg>
+    <div class="viz-controls" id="dice-btns" style="justify-content: flex-start;"><button class="btn" data-a="Hamilton" style="color: var(--accent-blue);">Roll Hamilton's die</button><button class="btn" data-a="Madison" style="color: var(--accent-orange);">Roll Madison's die</button></div>
+    <p class="small-text" id="dice-out"></p>
+</section>
+
+<section id="dice-fit" data-layer="deep" data-uses="maximum-likelihood">
+    <h2>Why counting is the best estimate<span class="sub">Maximum likelihood for one die</span></h2>
+    <div class="two-column" style="gap: 34px; align-items: flex-start;">
+        <div style="flex: 1;">
+            <p class="small-text">Hamilton's papers contain \(N\) function words, \(n_k\) of them word \(k\). The probability his die gives to all of them is</p>
+            <div class="eq-box" style="font-size: 0.8em;">\( L(\phi) = \prod_{k=1}^{70} \phi_{k \mid 0}^{\,n_k}, \qquad \sum_k \phi_{k \mid 0} = 1 \)</div>
+            <p class="small-text">Take the log, \( \sum_k n_k \log \phi_{k \mid 0} \), and maximize it while the faces sum to one (a Lagrange multiplier):</p>
+            <div class="eq-box" style="font-size: 0.8em;">\( \phi_{k \mid 0} = \dfrac{n_k}{N} \)</div>
+        </div>
+        <div class="box-b green" style="flex: 1;"><span class="tab">In words</span>
+            <p class="small-text">The best die is the one whose faces match how often he actually used each word. Training is counting.</p>
+            <p class="small-text">For \(\phi_y\), the same argument gives the share of training papers that are Madison's: \( 14 / 65 \).</p>
+            <p class="small-text">The coin of the <a href="/slides/intro_ml_07n">maximum likelihood lecture</a>, with 70 faces instead of two.</p>
+        </div>
+    </div>
+</section>
+
+<section id="part-3" class="centered part-divider" data-part="3" data-part-name="Run the story backwards" data-part-question="Given a paper, which die rolled it?">
+    <p class="part-eyebrow">Part 3 of 5</p>
+    <h1 class="part-title">Run the story backwards</h1>
+    <p class="part-q">Given a paper, which die rolled it?</p>
+    <nav class="part-map"></nav>
+</section>
+
+<section id="bayes" data-uses="bayes-rule naive-bayes-assumption" data-defines="naive-bayes">
+    <h2>Bayes' rule turns the story around</h2>
+    <div class="eq-box" style="font-size: 0.86em;">\( \log \dfrac{P(y = 1 \mid x)}{P(y = 0 \mid x)} \;=\; \log \dfrac{\phi_y}{1 - \phi_y} \;+\; \sum_{t=1}^{L} \log \dfrac{\phi_{x_t \mid 1}}{\phi_{x_t \mid 0}} \)</div>
+    <div class="two-column" style="gap: 26px; margin-top: 0.6em;">
+        <div class="box-b small-text" style="flex: 1;"><span class="tab">Read it as a vote</span>Start from the prior. Every function word in the paper adds its own vote: positive if Madison's die favours it, negative if Hamilton's does. Above zero, Madison.</div>
+        <div class="box-b green small-text" style="flex: 1;"><span class="tab">Why a sum</span>The model rolls the die independently for each word, so the probability of the paper is a product, and its log is a sum. The derivation is the next deep dive.</div>
+    </div>
+</section>
+
+<section id="bayes-deep" data-layer="deep" data-uses="bayes-rule naive-bayes-assumption logistic-regression">
+    <h2>From Bayes' rule to a sum of votes</h2>
+    <p class="small-text"><b>1.</b> Bayes for each author: \( P(y \mid x) = P(x \mid y)\, P(y) / P(x) \).</p>
+    <p class="small-text"><b>2.</b> Divide Madison by Hamilton: \(P(x)\) cancels.</p>
+    <div class="eq-box" style="font-size: 0.78em;">\( \dfrac{P(y = 1 \mid x)}{P(y = 0 \mid x)} = \dfrac{\phi_y}{1 - \phi_y} \cdot \dfrac{P(x \mid y = 1)}{P(x \mid y = 0)} \)</div>
+    <p class="small-text"><b>3.</b> The die is rolled independently: \( P(x \mid y) = \prod_{t=1}^{L} \phi_{x_t \mid y} \). This is the naive assumption.</p>
+    <p class="small-text"><b>4.</b> Take the log: products become sums, one vote per word.</p>
+    <p class="small-text"><b>5.</b> Back to a probability: \( P(y = 1 \mid x) = 1 / (1 + e^{-\text{log odds}}) \), the sigmoid. A word used \(c\) times votes \(c\) times, so the log odds is linear in the word counts: Naive Bayes draws the same kind of boundary as logistic regression.</p>
+</section>
+
+<section id="weigh" data-uses="naive-bayes bayes-rule">
+    <h2>Weigh a paper<span class="sub">The twelve largest votes, and the verdict. Pick any paper.</span></h2>
+    <div class="two-column" style="gap: 22px; align-items: flex-start;">
+        <div style="flex: 0 0 610px;"><svg id="viz-weigh" width="610" height="370"></svg></div>
+        <div style="flex: 1;">
+            <p><select class="pick" id="weigh-paper"></select></p>
+            <p class="small-text" id="weigh-out"></p>
+            <p class="small-text fragment">"upon" can only vote for Hamilton: Madison used it in 3 of his 14 papers. Ten of the twelve disputed papers never use it; No. 50 uses it once, No. 54 twice.</p>
+        </div>
+    </div>
+</section>
+
+<section id="never-seen" data-defines="laplace-smoothing" data-uses="naive-bayes maximum-likelihood" data-limits="maximum-likelihood">
+    <h2>The word a die has never rolled<span class="sub">Train on only three papers per author, and a zero appears</span></h2>
+    <div class="viz-controls" id="smooth-alpha" style="justify-content: flex-start;"><span class="ix">smoothing \(\alpha\)</span><button class="btn" data-a="0">0: plain counting</button><button class="btn" data-a="0.1">0.1</button><button class="btn" data-a="1">1: Laplace</button></div>
+    <p class="small-text" id="smooth-out" style="min-height: 4.4em;"></p>
+    <div class="eq-box fragment" style="font-size: 0.8em;">\( \phi_{k \mid y} = \dfrac{n_{k \mid y} + \alpha}{N_y + 70\,\alpha} \)</div>
+    <p class="small-text fragment">\(n_{k \mid y}\): how often author \(y\) used word \(k\) in training; \(N_y\): all their function words. Adding \(\alpha\) pretend sightings of every face turns "never seen, so impossible" into "never seen, so rare".</p>
+</section>
+
+<section id="verdict" data-uses="naive-bayes">
+    <h2>The verdict on the twelve<span class="sub">Trained on all 65 known papers, with \(\alpha = 1\). Positive: Madison.</span></h2>
+    <table class="verdict data-table small-text" id="verdict-table" style="margin: 0.6em auto;"></table>
+    <div class="two-column" style="gap: 26px; margin-top: 0.6em;">
+        <div class="box-b small-text" style="flex: 1;"><span class="tab">Checked first</span>Leaving each of the 65 known papers out in turn and predicting it, the model is right every time.</div>
+        <div class="box-b yellow small-text" style="flex: 1;"><span class="tab">The hard one</span>No. 55 leans Hamilton here. Mosteller and Wallace also found it the weakest case: still Madison, but at odds of only a few hundred to one, far weaker than for the others. A model that hesitates where historians hesitate is telling you something true.</div>
+    </div>
+</section>
+
+<section id="part-4" class="centered part-divider" data-part="4" data-part-name="Two numbers instead of seventy" data-part-question="What if the features are continuous?">
+    <p class="part-eyebrow">Part 4 of 5</p>
+    <h1 class="part-title">Two numbers instead of seventy</h1>
+    <p class="part-q">What if the features are continuous?</p>
+    <nav class="part-map"></nav>
+</section>
+
+<section id="gda" data-defines="gda" data-uses="multivariate-gaussian generative-model">
+    <h2>Gaussian discriminant analysis<span class="sub">Each paper as two rates. Each author as a cloud: a 2D Gaussian.</span></h2>
+    <div class="two-column" style="gap: 20px; align-items: flex-start;">
+        <div style="flex: 0 0 620px;"><svg id="viz-gda" width="620" height="420"></svg></div>
+        <div style="flex: 1;">
+            <p class="small-text">across <select class="pick" id="gda-x"><option selected>upon</option><option>on</option><option>by</option><option>there</option><option>to</option><option>also</option><option>an</option><option>of</option></select> &nbsp; up <select class="pick" id="gda-y"><option>upon</option><option>on</option><option selected>by</option><option>there</option><option>to</option><option>also</option><option>an</option><option>of</option></select></p>
+            <div class="viz-controls" style="justify-content: flex-start;"><button class="btn" id="gda-shared">one shared \(\Sigma\)</button><button class="btn" id="gda-sep">one \(\Sigma\) per author</button></div>
+            <div class="eq-box" style="font-size: 0.66em; text-align: left;">\( y \sim \text{Bernoulli}(\phi_y) \)<br>\( r \mid y \sim \mathcal{N}(\mu_y, \Sigma) \)</div>
+            <p class="tiny-text">\(r\): the paper's two rates, per 1,000 words. \(\mu_y\): author \(y\)'s average. \(\Sigma\): the spread. Fitting is averaging, the continuous version of counting.</p>
+            <p class="small-text" id="gda-out"></p>
+        </div>
+    </div>
+</section>
+
+<section id="gda-breaks" data-uses="gda multivariate-gaussian" data-limits="gda">
+    <h2>Where the Gaussian is wrong<span class="sub">A model that is wrong about the data, and still right about the author</span></h2>
+    <div class="two-column" style="gap: 24px; align-items: flex-start;">
+        <div style="flex: 0 0 560px;"><svg id="viz-breaks" width="560" height="300"></svg></div>
+        <div style="flex: 1;">
+            <p class="small-text" id="breaks-out"></p>
+            <p class="small-text fragment">GDA still separates the authors, because the two clouds are far apart. A generative model makes a strong claim about how the data was made; when the claim is wrong, its probabilities are off even when its decisions are right. Pick "on" against "by" on the last slide: closer to Gaussian, and the clouds overlap more.</p>
+        </div>
+    </div>
+</section>
+
+<section id="gda-deep" data-layer="deep" data-uses="gda logistic-regression multivariate-gaussian">
+    <h2>A shared \(\Sigma\) gives a straight boundary</h2>
+    <p class="small-text">The log odds is the difference of two Gaussian log densities plus the prior:</p>
+    <div class="eq-box" style="font-size: 0.74em;">\( \log \dfrac{P(y = 1 \mid r)}{P(y = 0 \mid r)} = -\tfrac{1}{2}(r - \mu_1)^\top \Sigma^{-1} (r - \mu_1) + \tfrac{1}{2}(r - \mu_0)^\top \Sigma^{-1} (r - \mu_0) + \log \dfrac{\phi_y}{1 - \phi_y} \)</div>
+    <p class="small-text">Expand: the \( r^\top \Sigma^{-1} r \) terms are the same for both authors and cancel. What is left is linear in \(r\):</p>
+    <div class="eq-box" style="font-size: 0.74em;">\( \log \dfrac{P(y = 1 \mid r)}{P(y = 0 \mid r)} = \theta^\top r + \theta_0, \qquad \theta = \Sigma^{-1} (\mu_1 - \mu_0) \)</div>
+    <p class="small-text">So \( P(y = 1 \mid r) = \sigma(\theta^\top r + \theta_0) \): exactly the form of logistic regression. With one \(\Sigma\) per author the quadratic terms stay, and the boundary curves.</p>
+</section>
+
+<section id="part-5" class="centered part-divider" data-part="5" data-part-name="Generative or discriminative?" data-part-question="Which learns faster from few examples?">
+    <p class="part-eyebrow">Part 5 of 5</p>
+    <h1 class="part-title">Generative or discriminative?</h1>
+    <p class="part-q">Which learns faster from few examples?</p>
+    <nav class="part-map"></nav>
+</section>
+
+<section id="two-kinds" data-defines="discriminative-model" data-uses="generative-model logistic-regression">
+    <h2>Two ways to learn the same boundary</h2>
+    <div class="two-column" style="gap: 26px; margin-top: 0.4em;">
+        <div class="box-b green" style="flex: 1;"><span class="tab">Generative: Naive Bayes, GDA</span>
+            <p class="small-text">Model how each author writes, \(P(x \mid y)\) and \(P(y)\), then flip it with Bayes' rule. Strong assumptions. Fitting is counting and averaging.</p></div>
+        <div class="box-b purple" style="flex: 1;"><span class="tab">Discriminative: logistic regression</span>
+            <p class="small-text">Model only the answer, \(P(y \mid x)\), and fit the boundary directly by gradient descent. Weaker assumptions. Never says how a paper is written.</p></div>
+    </div>
+    <p class="small-text fragment" style="margin-top: 0.8em;">Both end in a sigmoid of a linear score. The question is which finds a good one from less data.</p>
+</section>
+
+<section id="curve" data-uses="generative-model discriminative-model generalization">
+    <h2>Learning from a handful of papers<span class="sub">Train on a few papers per author, test on all the other known ones; 60 random draws per point</span></h2>
+    <div class="two-column" style="gap: 22px; align-items: flex-start;">
+        <div style="flex: 0 0 600px;"><svg id="viz-curve" width="600" height="340"></svg>
+            <div class="viz-controls" style="justify-content: flex-start;"><button class="btn" id="curve-run">Run the experiment</button></div></div>
+        <div style="flex: 1;">
+            <p class="small-text" id="curve-out"></p>
+            <p class="small-text fragment">With very few papers, the model that assumes more learns faster: its assumptions fill in what the data cannot. With enough data the discriminative model catches up, and where the assumptions are wrong it eventually wins. Ng and Jordan (2002) proved this trade-off.</p>
+        </div>
+    </div>
+</section>
+
+<section id="code-nb" data-layer="code" data-uses="naive-bayes laplace-smoothing">
+    <h2>Mosteller and Wallace in twenty lines<span class="sub">Naive Bayes from scratch, on the same counts. Press Run.</span></h2>
+    <pre data-runnable data-packages="numpy pandas" data-files="data/federalist_function_words.csv" style="font-size: 0.56em; width: 96%;"><code class="language-python" data-trim>
+import numpy as np, pandas as pd
+
+d = pd.read_csv(&#x27;federalist_function_words.csv&#x27;)
+words = d.columns[3:]                                   # the 70 function words
+known = d[d.author.isin([&#x27;Hamilton&#x27;, &#x27;Madison&#x27;])]
+
+def fit(train, alpha=1):
+    phi = {}
+    for a in [&#x27;Hamilton&#x27;, &#x27;Madison&#x27;]:
+        c = train[train.author == a][words].sum() + alpha    # how often a wrote each word, plus alpha
+        phi[a] = c / c.sum()                                  # the author&#x27;s die
+    return phi, (train.author == &#x27;Madison&#x27;).mean()
+
+def log_odds(paper, phi, prior):                        # above 0 means Madison
+    return np.log(prior / (1 - prior)) + (paper[words] * np.log(phi[&#x27;Madison&#x27;] / phi[&#x27;Hamilton&#x27;])).sum()
+
+hits = 0
+for i, p in known.iterrows():                           # leave one paper out, predict it
+    phi, prior = fit(known.drop(i))
+    hits += (log_odds(p, phi, prior) &gt; 0) == (p.author == &#x27;Madison&#x27;)
+print(&#x27;leave-one-out accuracy:&#x27;, round(hits / len(known), 3))
+
+phi, prior = fit(known)
+for _, p in d[d.author == &#x27;disputed&#x27;].iterrows():
+    print(f&#x27;No. {p.paper}: log odds for Madison {log_odds(p, phi, prior):+.1f}&#x27;)
+    </code></pre>
+    <p class="tiny-text">You should see a leave-one-out accuracy of 1.0, and eleven positive log odds: every disputed paper but No. 55 goes to Madison.</p>
+</section>
+
+<section id="takeaways">
+    <h2>What to take away</h2>
+    <ol class="small-text" style="line-height: 1.6;">
+        <li>A generative model is a story of how the data was made: here, each author rolls a die of function words.</li>
+        <li>Fitting it is counting (or averaging): maximum likelihood gives the observed frequencies. Smoothing keeps an unseen word from vetoing everything.</li>
+        <li>Classifying is running the story backwards with Bayes' rule; the log odds is a sum of one vote per word.</li>
+        <li>GDA does the same with Gaussian clouds; with a shared covariance its boundary is exactly a logistic regression.</li>
+        <li>Strong assumptions learn fast from little data, and are wrong in ways you should check. On the twelve disputed papers, 65 known ones were enough to agree with Mosteller and Wallace.</li>
+    </ol>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@6/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@6/dist/plugin/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="kit/deck-kit.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script>
+
+// ===================== Who wrote the Federalist Papers? (deck kit: DK) =====================
+// 85 essays of 1787 and 1788, signed Publius. Data: how often each paper uses each of the
+// 70 function words of Mosteller and Wallace (1964), counted from Project Gutenberg #1404.
+// Every number on the slides is computed here, in the browser, from that file.
+const FED = { H: 'Hamilton', M: 'Madison' };
+const P = DK.PAL, CH = P.blue, CM = P.orange, CD = P.ink;   // Hamilton, Madison, disputed
+FED.col = a => (a === 'Hamilton' ? CH : a === 'Madison' ? CM : CD);
+FED.t = function (sel, tex, x, y, o = {}) {
+    const size = o.size || 15, w = o.w || 90, h = Math.round(size * 2.4);
+    const fo = sel.append('foreignObject').attr('x', x - w / 2).attr('y', y - h / 2).attr('width', w).attr('height', h).style('pointer-events', 'none');
+    const div = fo.append('xhtml:div').style('color', o.color || P.ink).style('font-size', size + 'px').style('height', h + 'px')
+        .style('display', 'flex').style('align-items', 'center').style('justify-content', 'center').style('white-space', 'nowrap');
+    try { katex.render(tex, div.node(), { throwOnError: false }); } catch (e) { div.text(tex); }
+};
+
+FED.load = () => FED.data || (FED.data = Promise.all([
+    d3.csv('data/federalist_function_words.csv'),
+    d3.json('data/federalist_excerpts.json'),
+]).then(([rows, ex]) => {
+    const words = rows.columns.slice(3);
+    const papers = rows.map(r => ({ num: +r.paper, author: r.author, n: +r.words, c: words.map(w => +r[w]), ex: ex[r.paper] }));
+    papers.forEach(p => { p.L = d3.sum(p.c); p.rate = w => 1000 * p.c[words.indexOf(w)] / p.n; });
+    const known = papers.filter(p => p.author === 'Hamilton' || p.author === 'Madison');
+    return { words, papers, known, disputed: papers.filter(p => p.author === 'disputed') };
+}));
+
+// ---- Naive Bayes: each author is a die over the 70 function words
+FED.fit = function (train, words, alpha = 1) {
+    const die = a => { const c = words.map((_, k) => d3.sum(train.filter(p => p.author === a), p => p.c[k]) + alpha), s = d3.sum(c); return { count: c, phi: c.map(v => v / s), total: s - alpha * words.length }; };
+    const H = die('Hamilton'), M = die('Madison'), nM = train.filter(p => p.author === 'Madison').length;
+    return { H, M, prior: nM / train.length, nM, nH: train.length - nM };
+};
+// log odds for Madison, and each word's share of it (count times log ratio); NaN when 0/0
+FED.score = function (m, p) {
+    const parts = p.c.map((c, k) => {
+        if (!c) return 0;
+        const a = m.M.phi[k], b = m.H.phi[k];
+        if (a === 0 && b === 0) return NaN;
+        return c * (Math.log(a) - Math.log(b));
+    });
+    const prior = Math.log(m.prior / (1 - m.prior));
+    return { prior, parts, total: prior + parts.reduce((s, v) => s + v, 0) };
+};
+FED.post = s => (isNaN(s) ? NaN : 1 / (1 + Math.exp(-s)));
+FED.fmtP = p => (isNaN(p) ? 'no answer' : p > 0.9999 ? '> 99.99%' : p < 0.0001 ? '< 0.01%' : DK.pct(p, 1));
+
+// ---------- 1. guess the author of an unsigned excerpt
+FED.guess = function (D) {
+    const box = document.getElementById('guess-text'); if (!box) return;
+    const out = document.getElementById('guess-out'), r = DK.rng(7), pool = D.known.slice();
+    let cur, right = 0, tries = 0;
+    const next = () => { cur = pool[Math.floor(r() * pool.length)]; box.textContent = '"' + cur.ex + ' ..."'; out.innerHTML = 'Hamilton or Madison?'; };
+    document.querySelectorAll('#guess-btns .btn').forEach(b => b.addEventListener('click', () => {
+        if (!cur) return;
+        tries++; const ok = b.dataset.a === cur.author; right += ok;
+        out.innerHTML = `${ok ? '<b style="color:' + P.green + ';">Right.</b>' : '<b style="color:' + P.red + ';">No.</b>'} No. ${cur.num} is by <b style="color:${FED.col(cur.author)};">${cur.author}</b>. You: ${right} of ${tries}.`;
+        cur = null; setTimeout(next, 1600);
+    }));
+    next();
+};
+
+// ---------- 2. the small words: one dot per paper, rate per 1,000 words
+FED.marks = function (D) {
+    const svg = d3.select('#viz-marks'); if (svg.empty()) return;
+    const out = document.getElementById('marks-out');
+    const draw = w => {
+        document.querySelectorAll('#marks-words .btn').forEach(b => b.classList.toggle('active', b.dataset.w === w));
+        svg.selectAll('*').remove();
+        const max = Math.max(2, d3.max(D.papers, p => p.rate(w)));
+        const s = DK.axes(svg, 700, 300, { l: 120, r: 20, t: 10, b: 46 }, [0, max * 1.05], [0, 3], `\\text{"${w}" per 1,000 words}`, null);
+        svg.selectAll('g.axis').filter((d, i) => i === 1).remove();
+        const rows = [['Hamilton', 2.4], ['Madison', 1.5], ['disputed', 0.6]], r = DK.rng(3);
+        rows.forEach(([a, yy]) => {
+            svg.append('text').attr('x', 110).attr('y', s.y(yy) + 5).attr('text-anchor', 'end').attr('fill', FED.col(a)).attr('font-size', 16).text(a);
+            const ps = D.papers.filter(p => p.author === a);
+            ps.forEach(p => svg.append('circle').attr('cx', s.x(p.rate(w))).attr('cy', s.y(yy) + (r() - 0.5) * 34).attr('r', 5).attr('fill', FED.col(a)).attr('fill-opacity', a === 'disputed' ? 0 : 0.75).attr('stroke', FED.col(a)).attr('stroke-width', 1.5));
+            const m = d3.mean(ps, p => p.rate(w));
+            svg.append('line').attr('x1', s.x(m)).attr('x2', s.x(m)).attr('y1', s.y(yy) - 24).attr('y2', s.y(yy) + 24).attr('stroke', FED.col(a)).attr('stroke-width', 3);
+        });
+        const mean = a => d3.mean(D.papers.filter(p => p.author === a), p => p.rate(w));
+        out.innerHTML = `Average per 1,000 words: Hamilton <b style="color:${CH};">${DK.num(mean('Hamilton'), 2)}</b>, Madison <b style="color:${CM};">${DK.num(mean('Madison'), 2)}</b>, the disputed twelve <b>${DK.num(mean('disputed'), 2)}</b>.`;
+    };
+    document.querySelectorAll('#marks-words .btn').forEach(b => b.addEventListener('click', () => draw(b.dataset.w)));
+    draw('upon');
+};
+
+// ---------- 3. each author is a die: the faces, and a paper written by rolling it
+FED.dice = function (D) {
+    const svg = d3.select('#viz-dice'); if (svg.empty()) return;
+    const m = FED.fit(D.known, D.words), out = document.getElementById('dice-out');
+    const top = d3.range(D.words.length).sort((a, b) => (m.H.phi[b] + m.M.phi[b]) - (m.H.phi[a] + m.M.phi[a])).slice(0, 16);
+    const show = ['upon', 'on', 'by', 'there', 'also'].map(w => D.words.indexOf(w)).filter(k => !top.includes(k));
+    const ks = top.concat(show);
+    const x = d3.scaleBand().domain(ks).range([60, 690]).padding(0.25), y = d3.scaleLinear().domain([0, 0.2]).range([270, 20]);
+    svg.append('g').attr('class', 'axis').attr('transform', 'translate(60,0)').call(d3.axisLeft(y).ticks(4));
+    ks.forEach(k => {
+        [['H', CH, 0], ['M', CM, 1]].forEach(([a, c, j]) => svg.append('rect').attr('x', x(k) + j * x.bandwidth() / 2).attr('width', x.bandwidth() / 2)
+            .attr('y', y(m[a].phi[k])).attr('height', 270 - y(m[a].phi[k])).attr('fill', c));
+        svg.append('text').attr('transform', `translate(${x(k) + x.bandwidth() / 2},${280}) rotate(-50)`).attr('text-anchor', 'end').attr('fill', show.includes(k) ? P.yellow : P.inkMuted).attr('font-size', 13).text(D.words[k]);
+    });
+    FED.t(svg, '\\phi_{k \\mid y}', 110, 14, { size: 15, color: P.inkMuted });
+    const r = DK.rng(11);
+    const roll = a => {
+        const phi = m[a === 'Hamilton' ? 'H' : 'M'].phi, seq = [];
+        for (let t = 0; t < 30; t++) { let u = r(), k = 0; while (u > phi[k] && k < phi.length - 1) { u -= phi[k]; k++; } seq.push(D.words[k]); }
+        out.innerHTML = `<b style="color:${FED.col(a)};">${a}'s die</b>, rolled 30 times: ` + seq.map(w => (w === 'upon' || w === 'on' || w === 'by') ? `<b style="color:${P.yellow};">${w}</b>` : w).join(' ')
+            + '. Nonsense as English, but with his rates of "upon", "on" and "by". That is all the model knows about him.';
+    };
+    document.querySelectorAll('#dice-btns .btn').forEach(b => b.addEventListener('click', () => roll(b.dataset.a)));
+    out.textContent = 'Roll a die to write a paper the way the model thinks each author writes.';
+};
+
+// ---------- 4. weigh one paper: every word's vote, the prior, the verdict
+FED.weigh = function (D) {
+    const svg = d3.select('#viz-weigh'); if (svg.empty()) return;
+    const sel = document.getElementById('weigh-paper'), out = document.getElementById('weigh-out');
+    D.papers.filter(p => p.author !== 'Jay' && p.author !== 'joint').forEach(p => { const o = document.createElement('option'); o.value = p.num; o.textContent = `No. ${p.num}  (${p.author})`; sel.appendChild(o); });
+    sel.value = '51';
+    const draw = () => {
+        const p = D.papers.find(q => q.num === +sel.value);
+        const train = D.known.filter(q => q !== p);   // a known paper is never in its own training set
+        const m = FED.fit(train, D.words), S = FED.score(m, p);
+        const items = S.parts.map((v, k) => ({ w: D.words[k], v, c: p.c[k] })).filter(d => d.c).sort((a, b) => Math.abs(b.v) - Math.abs(a.v)).slice(0, 12);
+        svg.selectAll('*').remove();
+        const lim = Math.max(3, d3.max(items, d => Math.abs(d.v)), Math.abs(S.prior));
+        const x = d3.scaleLinear().domain([-lim, lim]).range([150, 560]);
+        svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 18).attr('y2', 360).attr('stroke', P.grid);
+        svg.append('text').attr('x', x(-lim)).attr('y', 12).attr('fill', CH).attr('font-size', 13).text('points to Hamilton');
+        svg.append('text').attr('x', x(lim)).attr('y', 12).attr('text-anchor', 'end').attr('fill', CM).attr('font-size', 13).text('points to Madison');
+        [{ w: 'prior', v: S.prior, c: null }, ...items].forEach((d, i) => {
+            const yy = 24 + i * 26;
+            svg.append('text').attr('x', 140).attr('y', yy + 16).attr('text-anchor', 'end').attr('fill', P.ink).attr('font-size', 15).attr('font-family', d.c === null ? 'DM Sans' : 'JetBrains Mono').text(d.c === null ? 'before reading' : `${d.w} ×${d.c}`);
+            svg.append('rect').attr('x', Math.min(x(0), x(d.v))).attr('width', Math.abs(x(d.v) - x(0))).attr('y', yy + 3).attr('height', 18).attr('rx', 3).attr('fill', d.v > 0 ? CM : CH).attr('opacity', d.c === null ? 0.5 : 0.9);
+            svg.append('text').attr('x', 600).attr('y', yy + 16).attr('text-anchor', 'end').attr('fill', P.inkMuted).attr('font-size', 13).text(DK.num(d.v, 2));
+        });
+        const post = FED.post(S.total), who = S.total > 0 ? 'Madison' : 'Hamilton';
+        out.innerHTML = `No. ${p.num}: log odds <b>${DK.num(S.total, 1)}</b>, so P(Madison | paper) = <b style="color:${FED.col(who)};">${FED.fmtP(post)}</b>: <b style="color:${FED.col(who)};">${who}</b>.`
+            + (p.author === 'disputed' ? '' : ` It was written by ${p.author}, and left out of training here.`)
+            + (p.num === 55 ? ' The weakest of the twelve: Mosteller and Wallace also found No. 55 the hardest case, still Madison but with far less certainty than the others.' : '');
+    };
+    sel.addEventListener('change', draw); draw();
+};
+
+// ---------- 5. never seen: train on three papers each, with and without smoothing
+FED.smooth = function (D) {
+    const out = document.getElementById('smooth-out'); if (!out) return;
+    const r = DK.rng(4), pick = (a, n) => { const ps = D.known.filter(p => p.author === a).slice(); for (let i = ps.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [ps[i], ps[j]] = [ps[j], ps[i]]; } return ps.slice(0, n); };
+    const train = pick('Hamilton', 3).concat(pick('Madison', 3)), test = D.known.filter(p => !train.includes(p));
+    const draw = a => {
+        document.querySelectorAll('#smooth-alpha .btn').forEach(b => b.classList.toggle('active', +b.dataset.a === a));
+        const m = FED.fit(train, D.words, a);
+        const unseen = D.words.filter((w, k) => !m.H.count[k] || !m.M.count[k]);
+        let right = 0, none = 0, vetoed = 0;
+        test.forEach(p => { const S = FED.score(m, p); if (isNaN(S.total)) none++; else { if (!isFinite(S.total)) vetoed++; right += (S.total > 0) === (p.author === 'Madison'); } });
+        const dm = D.disputed.filter(p => FED.score(m, p).total > 0).length;
+        out.innerHTML = `Trained on papers ${train.map(p => p.num).join(', ')} only. `
+            + (a === 0 ? `<b>${unseen.length} words</b> never appear for one of the authors (${unseen.slice(0, 6).join(', ')}...), so their \\(\\phi\\) is exactly 0. Of the ${test.length} other known papers, <b style="color:${P.red};">${none} get no answer at all</b> (0 against 0). Of the other ${test.length - none}, ${vetoed} are decided by a single word one author never used, whatever the rest of the paper says; ${right} come out right.`
+                : `With \\(\\alpha = ${a}\\), no \\(\\phi\\) is zero. Of the ${test.length} other known papers, <b style="color:${P.green};">${right} come out right</b> (${DK.pct(right / test.length, 0)}), and ${dm} of the 12 disputed go to Madison.`);
+        DK.math(out);
+    };
+    document.querySelectorAll('#smooth-alpha .btn').forEach(b => b.addEventListener('click', () => draw(+b.dataset.a)));
+    draw(0);
+};
+
+// ---------- 6. the verdict on the twelve
+FED.verdict = function (D) {
+    const tb = document.getElementById('verdict-table'); if (!tb) return;
+    const m = FED.fit(D.known, D.words);
+    tb.innerHTML = '<tr><th>paper</th>' + D.disputed.map(p => `<th>${p.num}</th>`).join('') + '</tr><tr><td>log odds</td>'
+        + D.disputed.map(p => { const s = FED.score(m, p).total; return `<td style="color:${s > 0 ? CM : CH};">${DK.num(s, 1)}</td>`; }).join('') + '</tr>';
+};
+
+// ---------- 7. GDA: two words, one Gaussian per author
+FED.gauss = function (pts) {
+    const n = pts.length, mx = d3.mean(pts, p => p[0]), my = d3.mean(pts, p => p[1]);
+    let a = 0, b = 0, c = 0; pts.forEach(p => { const u = p[0] - mx, v = p[1] - my; a += u * u; b += u * v; c += v * v; });
+    return { mu: [mx, my], S: [[a / n, b / n], [b / n, c / n]], n };
+};
+FED.logN = (x, mu, S) => { const det = S[0][0] * S[1][1] - S[0][1] ** 2, u = x[0] - mu[0], v = x[1] - mu[1];
+    const q = (S[1][1] * u * u - 2 * S[0][1] * u * v + S[0][0] * v * v) / det; return -0.5 * q - 0.5 * Math.log(det) - Math.log(2 * Math.PI); };
+FED.gda = function (D) {
+    const svg = d3.select('#viz-gda'); if (svg.empty()) return;
+    const out = document.getElementById('gda-out'), sx = document.getElementById('gda-x'), sy = document.getElementById('gda-y');
+    let shared = true;
+    const fit = (train, wx, wy) => {
+        const pt = p => [p.rate(wx), p.rate(wy)];
+        const G = { H: FED.gauss(train.filter(p => p.author === 'Hamilton').map(pt)), M: FED.gauss(train.filter(p => p.author === 'Madison').map(pt)) };
+        if (shared) { const n = G.H.n + G.M.n, S = [0, 1].map(i => [0, 1].map(j => (G.H.n * G.H.S[i][j] + G.M.n * G.M.S[i][j]) / n)); G.H.S = S; G.M.S = S; }
+        const lp = Math.log(G.M.n / G.H.n);
+        return { G, pt, lo: p => FED.logN(pt(p), G.M.mu, G.M.S) - FED.logN(pt(p), G.H.mu, G.H.S) + lp };
+    };
+    const draw = () => {
+        document.getElementById('gda-shared').classList.toggle('active', shared); document.getElementById('gda-sep').classList.toggle('active', !shared);
+        const wx = sx.value, wy = sy.value, F = fit(D.known, wx, wy);
+        svg.selectAll('*').remove();
+        const all = D.papers.filter(p => p.author !== 'Jay' && p.author !== 'joint');
+        const xm = d3.max(all, p => p.rate(wx)) * 1.08 || 1, ym = d3.max(all, p => p.rate(wy)) * 1.08 || 1;
+        const s = DK.axes(svg, 620, 420, { l: 64, r: 16, t: 12, b: 48 }, [0, xm], [0, ym], `\\text{"${wx}" per 1,000 words}`, `\\text{"${wy}" per 1,000 words}`);
+        const N = 70, vals = [];   // where the log odds changes sign: the decision boundary
+        for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const x = xm * i / (N - 1), y = ym * j / (N - 1); vals.push(F.lo({ rate: w => (w === wx ? x : y) })); }
+        const gx = d3.scaleLinear().domain([0, N - 1]).range([s.x(0), s.x(xm)]), gy = d3.scaleLinear().domain([0, N - 1]).range([s.y(0), s.y(ym)]);
+        const proj = d3.geoPath(d3.geoTransform({ point(px, py) { this.stream.point(gx(px), gy(py)); } }));
+        svg.insert('g', 'g').selectAll('path').data(d3.contours().size([N, N]).thresholds([0])(vals)).join('path').attr('d', proj).attr('fill', CM).attr('fill-opacity', 0.1).attr('stroke', P.green).attr('stroke-width', 2.5);
+        [['H', CH], ['M', CM]].forEach(([a, c]) => {   // one and two standard deviations
+            const g = F.G[a], S = g.S, tr = S[0][0] + S[1][1], det = S[0][0] * S[1][1] - S[0][1] ** 2, l1 = tr / 2 + Math.sqrt(tr * tr / 4 - det), l2 = tr / 2 - Math.sqrt(tr * tr / 4 - det);
+            const ang = Math.atan2(l1 - S[0][0], S[0][1] || 1e-12);
+            [1, 2].forEach(k => svg.append('path').attr('d', d3.line()(d3.range(0, 6.3, 0.1).map(t => { const u = k * Math.sqrt(l1) * Math.cos(t), v = k * Math.sqrt(Math.max(l2, 0)) * Math.sin(t);
+                return [s.x(g.mu[0] + u * Math.cos(ang) - v * Math.sin(ang)), s.y(g.mu[1] + u * Math.sin(ang) + v * Math.cos(ang))]; }))).attr('fill', 'none').attr('stroke', c).attr('stroke-opacity', k === 1 ? 0.8 : 0.4).attr('stroke-width', 1.6));
+        });
+        all.forEach(p => svg.append('circle').attr('cx', s.x(p.rate(wx))).attr('cy', s.y(p.rate(wy))).attr('r', 5.5).attr('fill', FED.col(p.author)).attr('fill-opacity', p.author === 'disputed' ? 0 : 0.8).attr('stroke', FED.col(p.author)).attr('stroke-width', 1.8));
+        let loo = 0; D.known.forEach(p => { const f = fit(D.known.filter(q => q !== p), wx, wy); loo += (f.lo(p) > 0) === (p.author === 'Madison'); });
+        const dm = D.disputed.filter(p => F.lo(p) > 0).length;
+        out.innerHTML = `${shared ? 'One shared covariance: the boundary is a straight line.' : 'One covariance per author: the boundary curves.'} Leaving each known paper out in turn, GDA gets <b>${loo} of ${D.known.length}</b> right; it gives <b style="color:${CM};">${dm} of the 12</b> disputed papers to Madison (hollow dots).`;
+    };
+    [sx, sy].forEach(e => e.addEventListener('change', draw));
+    document.getElementById('gda-shared').addEventListener('click', () => { shared = true; draw(); });
+    document.getElementById('gda-sep').addEventListener('click', () => { shared = false; draw(); });
+    draw();
+};
+
+// ---------- 8. where the Gaussian breaks: Madison's "upon"
+FED.breaks = function (D) {
+    const svg = d3.select('#viz-breaks'); if (svg.empty()) return;
+    const v = D.known.filter(p => p.author === 'Madison').map(p => p.rate('upon')), g = FED.gauss(v.map(x => [x, 0]));
+    const mu = g.mu[0], sd = Math.sqrt(g.S[0][0]);
+    const s = DK.axes(svg, 560, 300, { l: 60, r: 14, t: 12, b: 46 }, [-1.2, 1.6], [0, 12], '\\text{"upon" per 1,000 words, Madison}', '\\text{papers}');
+    const bins = d3.bin().domain([-1.2, 1.6]).thresholds(d3.range(-1.2, 1.61, 0.1))(v);
+    bins.forEach(b => b.length && svg.append('rect').attr('x', s.x(b.x0) + 1).attr('width', s.x(b.x1) - s.x(b.x0) - 2).attr('y', s.y(b.length)).attr('height', s.y(0) - s.y(b.length)).attr('fill', CM).attr('rx', 2));
+    const dens = x => v.length * 0.1 * Math.exp(-0.5 * ((x - mu) / sd) ** 2) / (sd * Math.sqrt(2 * Math.PI));
+    svg.append('path').attr('d', d3.line()(d3.range(-1.2, 1.61, 0.02).map(x => [s.x(x), s.y(dens(x))]))).attr('fill', 'none').attr('stroke', P.yellow).attr('stroke-width', 2.5);
+    svg.append('line').attr('x1', s.x(0)).attr('x2', s.x(0)).attr('y1', s.y(0)).attr('y2', s.y(12)).attr('stroke', P.red).attr('stroke-dasharray', '4,4');
+    const zero = v.filter(x => x === 0).length;
+    const below = 0.5 * (1 + (function erf(z) { const t = 1 / (1 + 0.3275911 * Math.abs(z)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z); return z >= 0 ? y : -y; })((0 - mu) / (sd * Math.SQRT2)));
+    document.getElementById('breaks-out').innerHTML = `<b>${zero} of ${v.length}</b> Madison papers never use "upon": a spike at exactly zero. The fitted Gaussian (yellow) is smooth and symmetric, and puts <b>${DK.pct(below, 0)}</b> of its weight on negative rates, which cannot exist.`;
+};
+
+// ---------- 9. generative or discriminative: who learns faster from few papers?
+FED.curve = function (D) {
+    const btn = document.getElementById('curve-run'); if (!btn) return;
+    const svg = d3.select('#viz-curve'), out = document.getElementById('curve-out'), KS = [1, 2, 3, 4, 6, 8, 10], REP = 60;
+    const lr = (train, words) => {   // logistic regression on standardized rates, gradient descent, a little L2
+        const X = train.map(p => words.map((_, k) => 1000 * p.c[k] / p.n)), y = train.map(p => (p.author === 'Madison' ? 1 : 0)), d = words.length;
+        const mu = d3.range(d).map(k => d3.mean(X, x => x[k])), sd = d3.range(d).map(k => (d3.deviation(X, x => x[k]) || 0) + 1e-6);
+        const Z = X.map(x => x.map((v, k) => (v - mu[k]) / sd[k])), w = new Float64Array(d); let b = 0;
+        for (let it = 0; it < 200; it++) {
+            const g = new Float64Array(d); let gb = 0;
+            Z.forEach((z, i) => { let s = b; for (let k = 0; k < d; k++) s += w[k] * z[k]; const e = 1 / (1 + Math.exp(-s)) - y[i]; for (let k = 0; k < d; k++) g[k] += e * z[k]; gb += e; });
+            for (let k = 0; k < d; k++) w[k] -= 0.5 * (g[k] / Z.length + 0.1 * w[k]); b -= 0.5 * gb / Z.length;
+        }
+        return p => { let s = b; for (let k = 0; k < d; k++) s += w[k] * ((1000 * p.c[k] / p.n - mu[k]) / sd[k]); return s > 0; };
+    };
+    const draw = res => {
+        svg.selectAll('*').remove();
+        const s = DK.axes(svg, 600, 340, { l: 64, r: 16, t: 12, b: 46 }, [0, 10.5], [0.4, 1], '\\text{training papers per author}', '\\text{accuracy on the other known papers}');
+        [['nb', P.green, 'Naive Bayes (generative)'], ['lr', P.purple, 'logistic regression (discriminative)']].forEach(([k, c, name], j) => {
+            const pts = res.filter(r => r[k] != null);
+            svg.append('path').attr('d', d3.line().x(r => s.x(r.k)).y(r => s.y(r[k]))(pts)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2.6);
+            pts.forEach(r => svg.append('circle').attr('cx', s.x(r.k)).attr('cy', s.y(r[k])).attr('r', 4.5).attr('fill', c));
+            svg.append('text').attr('x', s.x(10.3)).attr('y', s.y(0.52) + j * 20).attr('text-anchor', 'end').attr('fill', c).attr('font-size', 14).text(name);
+        });
+    };
+    btn.addEventListener('click', () => {
+        btn.disabled = true; const r = DK.rng(5), res = [];
+        const pick = (a, n) => { const ps = D.known.filter(p => p.author === a).slice(); for (let i = ps.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [ps[i], ps[j]] = [ps[j], ps[i]]; } return ps.slice(0, n); };
+        let i = 0;
+        const step = () => {
+            const k = KS[i]; let a = 0, b = 0, n = 0;
+            for (let rep = 0; rep < REP; rep++) {
+                const train = pick('Hamilton', k).concat(pick('Madison', k)), test = D.known.filter(p => !train.includes(p));
+                const m = FED.fit(train, D.words), f = lr(train, D.words);
+                test.forEach(p => { const y = p.author === 'Madison'; a += (FED.score(m, p).total > 0) === y; b += f(p) === y; n++; });
+            }
+            res.push({ k, nb: a / n, lr: b / n }); draw(res);
+            out.innerHTML = res.map(q => `${q.k} each: Naive Bayes <b style="color:${P.green};">${DK.pct(q.nb, 0)}</b>, logistic <b style="color:${P.purple};">${DK.pct(q.lr, 0)}</b>`).join('<br>');
+            if (++i < KS.length) setTimeout(step, 0); else btn.disabled = false;
+        };
+        draw([]); setTimeout(step, 0);
+    });
+    draw([]);
+};
+
+FED.init = function () {
+    FED.load().then(D => {
+        [FED.guess, FED.marks, FED.dice, FED.weigh, FED.smooth, FED.verdict, FED.gda, FED.breaks, FED.curve]
+            .forEach(f => { try { f(D); } catch (e) { console.error('FED', e); } });
+    });
+};
+window.FED = FED;
+
+Reveal.initialize({ width: 1280, height: 720, center: false, hash: true, slideNumber: true, transition: 'fade', transitionSpeed: 'fast', scrollActivationWidth: 600, plugins: [RevealHighlight] });
+Reveal.on('ready', () => {
+    const rm = () => renderMathInElement(document.body, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }] });
+    if (window.renderMathInElement) { rm(); FED.init(); } else window.addEventListener('load', () => { rm(); FED.init(); });
+});
+</script>
+</body>
+</html>

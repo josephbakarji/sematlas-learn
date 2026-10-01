@@ -1,0 +1,30 @@
+# A story deck: one question, one dataset, one notation, written before the first slide.
+question: Who wrote the twelve disputed Federalist Papers?
+answer: Madison, for eleven of them with overwhelming odds; No. 55 is the hard case, as in Mosteller and Wallace (1964).
+teaches: [generative-model, naive-bayes, maximum-likelihood, laplace-smoothing, gda, discriminative-model]
+needs: [bayes-rule, multivariate-gaussian, logistic-regression]
+spine:
+  - {part: The mystery, question: Who wrote the twelve disputed papers?}
+  - {part: Each author is a die, question: How would each of them write a paper?}
+  - {part: Run the story backwards, question: Given a paper, which die rolled it?}
+  - {part: Two numbers instead of seventy, question: What if the features are continuous?}
+  - {part: Generative or discriminative?, question: Which learns faster from few examples?}
+notation:
+  y: the author, 1 for Madison, 0 for Hamilton
+  k: one of the 70 function words
+  x_t: the t-th function word of a paper, t = 1..L
+  phi_y: P(y = 1)
+  phi_k|y: P(x_t = k | y), face k of author y's die
+  r: a paper's two word rates per 1,000 words (GDA)
+  mu_y, Sigma: author y's mean rate and the spread
+data:
+  - file: data/federalist_function_words.csv
+    what: counts of Mosteller and Wallace's 70 function words in each of the 85 papers
+    source: Project Gutenberg eBook 1404; authorship as in Mosteller and Wallace (1964)
+    licence: public domain
+  - file: data/federalist_excerpts.json
+    what: the first 70 words of each paper
+    source: Project Gutenberg eBook 1404
+    licence: public domain
+verify: python3 verify.py
+licence: {code: MIT, deck: CC BY-SA 4.0}
