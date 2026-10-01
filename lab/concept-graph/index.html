@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfaf7; --panel: #ffffff; --ink: #1d1f23; --ink-dim: #5f6570; --rule: #e4e1da;
+  --link: #b9b4aa; --learn: #0f9b83; --accent: #b7791f; --back: #c2410c; --dim: 0.12;
+  --serif: "Source Serif 4", Georgia, serif; --sans: Inter, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1117; --panel: #141a23; --ink: #e2e6ec; --ink-dim: #8e99a8; --rule: #253041;
+  --link: #3a4558; --learn: #4fd8bd; --accent: #e0ab52; --back: #f0835a; } }
+:root[data-theme="dark"] { --bg: #0d1117; --panel: #141a23; --ink: #e2e6ec; --ink-dim: #8e99a8; --rule: #253041;
+  --link: #3a4558; --learn: #4fd8bd; --accent: #e0ab52; --back: #f0835a; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--sans); overflow: hidden; }
+header { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 18px; padding: 14px 20px; z-index: 2; pointer-events: none; }
+header > * { pointer-events: auto; }
+h1 { font: 600 20px var(--serif); margin: 0; letter-spacing: 0.01em; }
+h1 small { font: 400 13px var(--sans); color: var(--ink-dim); margin-left: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--panel); }
+.seg button { font: 500 13px var(--sans); color: var(--ink-dim); background: none; border: 0; padding: 6px 12px; cursor: pointer; }
+.seg button.on { background: var(--ink); color: var(--bg); }
+.seg button:focus-visible, input:focus-visible, .legend li:focus-visible { outline: 2px solid var(--learn); outline-offset: 2px; }
+input[type=search] { font: 13px var(--sans); color: var(--ink); background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 6px 10px; width: 200px; }
+label.tg { font-size: 13px; color: var(--ink-dim); display: inline-flex; gap: 6px; align-items: center; }
+svg { display: block; width: 100vw; height: 100vh; cursor: grab; }
+.legend { position: absolute; left: 20px; bottom: 18px; margin: 0; padding: 10px 12px; list-style: none; background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--rule); border-radius: 10px; max-width: 360px; z-index: 2; }
+.legend li { display: flex; gap: 8px; align-items: center; padding: 2px 4px; border-radius: 6px; cursor: pointer; font-size: 12.5px; }
+.legend li.off { opacity: 0.35; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.legend .n { color: var(--ink-dim); margin-left: auto; font-variant-numeric: tabular-nums; }
+.legend .cap { font-size: 11px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; padding: 0 4px 4px; cursor: default; }
+aside { position: absolute; right: 18px; top: 64px; width: 320px; background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; z-index: 2; display: none; box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+aside.on { display: block; }
+aside h2 { font: 600 19px var(--serif); margin: 0 0 2px; text-transform: none; }
+aside .deck { font-size: 12.5px; margin-bottom: 10px; }
+aside dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0 0 12px; font-size: 13px; }
+aside dt { color: var(--ink-dim); }
+aside dd { margin: 0; }
+aside .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+aside a.btn { font: 500 13px var(--sans); text-decoration: none; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--rule); color: var(--ink); }
+aside a.btn.go { background: var(--learn); border-color: var(--learn); color: var(--bg); }
+aside .chain { font-size: 12.5px; color: var(--ink-dim); margin-top: 10px; }
+aside .chain b { color: var(--ink); font-weight: 500; }
+.note { position: absolute; right: 20px; bottom: 18px; font-size: 12px; color: var(--ink-dim); max-width: 380px; text-align: right; z-index: 2; }
+.hull { stroke-width: 1.2; stroke-linejoin: round; pointer-events: none; }
+.edge { fill: none; stroke: var(--link); stroke-width: 1.2; }
+.edge.back { stroke: var(--back); stroke-width: 1.8; }
+.edge.up { stroke: var(--accent); stroke-width: 2.2; }
+.edge.down { stroke: var(--learn); stroke-width: 2.2; }
+.qedge { fill: none; stroke: var(--accent); stroke-dasharray: 3 4; stroke-width: 1.2; }
+.node circle { stroke: var(--bg); stroke-width: 1.5; cursor: pointer; }
+.node text, .q text { font: 500 11.5px var(--sans); fill: var(--ink); paint-order: stroke; stroke: var(--bg); stroke-width: 3px; pointer-events: none; }
+.node.big text { font-size: 12.5px; }
+.q path { fill: var(--accent); stroke: var(--bg); stroke-width: 1.5; cursor: pointer; }
+.q text { font: italic 600 13px var(--serif); fill: var(--accent); }
+.faded { opacity: var(--dim); }
+.ring { fill: none; stroke: var(--ink-dim); stroke-opacity: 0.35; stroke-dasharray: 2 5; }
+.axis text { font: 11.5px var(--sans); fill: var(--ink-dim); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (max-width: 720px) { header { flex-wrap: wrap; gap: 8px; } aside { left: 16px; right: 16px; width: auto; } .legend { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Concept Map <small>the course, as a graph of ideas</small></h1>
+  <div class="seg" role="tablist" aria-label="Layout">
+    <button data-l="web" class="on" title="Force-directed: concepts pull on their prerequisites; each lecture is a territory">Web</button>
+    <button data-l="time" title="Left to right in course order; a red link is a prerequisite taught later than the concept that needs it">Timeline</button>
+    <button data-l="depth" title="Basics at the centre, the frontier at the edge: radius is the longest prerequisite chain">Depth</button>
+  </div>
+  <input type="search" id="q" placeholder="Find a concept" aria-label="Find a concept">
+  <label class="tg"><input type="checkbox" id="stories" checked> story decks</label>
+</header>
+<svg id="map" role="img" aria-label="Graph of course concepts and their prerequisites"></svg>
+<ul class="legend" id="legend"></ul>
+<aside id="panel" aria-live="polite"></aside>
+<p class="note" id="note">Hover a concept to trace it back to the basics (gold) and forward to what it unlocks (teal). Click to pin it; the panel opens the slide that teaches it.</p>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script>
+(async function () {
+  const G = await (await fetch('graph.json')).json();
+  const svg = d3.select('#map'), root = svg.append('g'), W = () => innerWidth, H = () => innerHeight;
+  const zoom = d3.zoom().scaleExtent([0.2, 4]).on('zoom', e => root.attr('transform', e.transform)); svg.call(zoom);
+  const fit = () => { const all = N.concat(Q).filter(d => !off.has(d.deck)); const x0 = d3.min(all, d => d.x) - 110, x1 = d3.max(all, d => d.x) + 110, y0 = d3.min(all, d => d.y) - 50, y1 = Math.max(d3.max(all, d => d.y) + 50, mode === 'time' ? H() - 20 : -Infinity);
+    const k = Math.min(4, 0.92 * Math.min(W() / (x1 - x0), (H() - 140) / (y1 - y0))); svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity.translate(W() / 2 - k * (x0 + x1) / 2, (H() + 40) / 2 - k * (y0 + y1) / 2).scale(k)); };
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+  // one hue per lecture, in course order, so colour also reads as time
+  const decks = G.decks, di = Object.fromEntries(decks.map(d => [d.id, d.i]));
+  const dark = matchMedia('(prefers-color-scheme: dark)').matches && document.documentElement.dataset.theme !== 'light';
+  const PAL = dark ? ['#5b9cf5', '#e0ab52', '#4fd8bd', '#e07a8a', '#a98bf0', '#9fcf6a', '#f08f4f', '#56c2e0', '#d9d26a', '#c78fd0']
+                   : ['#2f6fd6', '#b7791f', '#0f9b83', '#c2415a', '#7354c9', '#5a8f2a', '#c2611c', '#1f8fb3', '#8f8a1f', '#9a4fa6'];
+  const col = id => PAL[di[id] % PAL.length];
+  const N = G.nodes.map(d => ({ ...d })), byId = new Map(N.map(d => [d.id, d]));
+  const E = G.edges.map(e => ({ source: byId.get(e.source), target: byId.get(e.target) }));
+  N.forEach(d => { d.r = 4.5 + 2.2 * Math.sqrt(d.uses + 1); d.pre = []; d.post = []; });
+  E.forEach(e => { e.target.pre.push(e.source); e.source.post.push(e.target); e.back = di[e.source.deck] > di[e.target.deck]; });
+  // depth: the longest prerequisite chain below a concept
+  const depth = d => d._depth ?? (d._depth = d.pre.length ? 1 + d3.max(d.pre, depth) : 0);
+  N.forEach(depth);
+  const Q = G.questions.map(q => ({ ...q, q: true, r: 11 }));
+  const QE = Q.flatMap(q => q.teaches.map(k => ({ source: q, target: byId.get(k) })));
+
+  // ---------- legend: click a lecture to show or hide it
+  const off = new Set();
+  const leg = d3.select('#legend');
+  leg.append('li').attr('class', 'cap').text('lectures, in course order');
+  decks.forEach(d => leg.append('li').attr('tabindex', 0).attr('data-d', d.id)
+    .html(`<i style="background:${col(d.id)}"></i><span>${d.title}</span><span class="n">${N.filter(n => n.deck === d.id).length}</span>`)
+    .on('click keydown', function (e) { if (e.type === 'keydown' && e.key !== 'Enter') return;
+      off.has(d.id) ? off.delete(d.id) : off.add(d.id); this.classList.toggle('off'); paint(); }));
+
+  // ---------- drawing
+  const hullG = root.append('g'), edgeG = root.append('g'), qeG = root.append('g'), axisG = root.append('g').attr('class', 'axis'),
+        nodeG = root.append('g'), qG = root.append('g');
+  svg.append('defs').selectAll('marker').data(['link', 'back', 'up', 'down']).join('marker').attr('id', d => 'm-' + d)
+    .attr('viewBox', '0 -4 8 8').attr('refX', 8).attr('markerWidth', 6).attr('markerHeight', 6).attr('orient', 'auto')
+    .append('path').attr('d', 'M0,-4L8,0L0,4').attr('fill', d => css({ link: '--link', back: '--back', up: '--accent', down: '--learn' }[d]));
+  const edge = edgeG.selectAll('path').data(E).join('path').attr('class', e => 'edge' + (e.back ? ' back' : '')).attr('marker-end', e => `url(#m-${e.back ? 'back' : 'link'})`);
+  const qedge = qeG.selectAll('path').data(QE).join('path').attr('class', 'qedge');
+  const node = nodeG.selectAll('g').data(N).join('g').attr('class', d => 'node' + (d.uses >= 3 ? ' big' : ''))
+    .on('mouseenter', (e, d) => focus(d)).on('mouseleave', () => focus(pinned)).on('click', (e, d) => { pinned = pinned === d ? null : d; focus(pinned); panel(pinned); })
+    .on('dblclick', (e, d) => open(d.url, '_blank'));
+  node.append('circle').attr('r', d => d.r).attr('fill', d => col(d.deck));
+  node.append('text').attr('dy', d => -d.r - 4).attr('text-anchor', 'middle').text(d => d.name);
+  const qn = qG.selectAll('g').data(Q).join('g').attr('class', 'q').on('click', (e, d) => open(d.url, '_blank'));
+  qn.append('path').attr('d', d3.symbol(d3.symbolStar, 340)());
+  qn.append('text').attr('dy', 26).attr('text-anchor', 'middle').text(d => d.question);
+  qn.append('title').text('A story deck. Click to open it.');
+
+  // ---------- hover: back to the basics, forward to the frontier
+  let pinned = null;
+  const walk = (d, key) => { const s = new Set(), st = [d]; while (st.length) for (const x of st.pop()[key]) if (!s.has(x)) { s.add(x); st.push(x); } return s; };
+  function focus(d) {
+    if (!d) { node.classed('faded', n => off.has(n.deck)); edge.classed('faded', e => off.has(e.source.deck) || off.has(e.target.deck)).classed('up', false).classed('down', false)
+      .attr('marker-end', e => `url(#m-${e.back ? 'back' : 'link'})`); qn.classed('faded', false); qedge.classed('faded', false); return; }
+    const up = walk(d, 'pre'), down = walk(d, 'post'), on = n => n === d || up.has(n) || down.has(n);
+    node.classed('faded', n => !on(n));
+    edge.classed('up', e => up.has(e.source) && (e.target === d || up.has(e.target)))
+        .classed('down', e => (e.source === d || down.has(e.source)) && down.has(e.target))
+        .classed('faded', e => !(on(e.source) && on(e.target)))
+        .attr('marker-end', function (e) { return `url(#m-${this.classList.contains('up') ? 'up' : this.classList.contains('down') ? 'down' : e.back ? 'back' : 'link'})`; });
+    qn.classed('faded', q => !q.teaches.some(k => on(byId.get(k))));
+    qedge.classed('faded', e => !on(e.target));
+  }
+  function panel(d) {
+    const p = d3.select('#panel').classed('on', !!d); if (!d) return;
+    const deck = decks.find(x => x.id === d.deck), up = walk(d, 'pre'), down = walk(d, 'post');
+    const basics = [...up].filter(x => !x.pre.length).map(x => x.name);
+    p.html(`<h2>${d.name}</h2><div class="deck" style="color:${col(d.deck)}">${deck.title}</div>
+      <dl><dt>taught on</dt><dd>${d.slide}</dd>
+      <dt>built on</dt><dd>${up.size} concept${up.size === 1 ? '' : 's'}${basics.length ? `, from ${basics.slice(0, 4).join(', ')}` : ''}</dd>
+      <dt>unlocks</dt><dd>${down.size} concept${down.size === 1 ? '' : 's'}</dd>
+      <dt>used on</dt><dd>${d.uses} other slide${d.uses === 1 ? '' : 's'}</dd>
+      ${d.wiki ? `<dt>Wikipedia</dt><dd>${d.wiki}</dd>` : ''}</dl>
+      <div class="acts"><a class="btn go" href="${d.url}" target="_blank" rel="noopener">Open the slide</a>
+      <a class="btn" href="https://www.sematlas.com/q?concept=${d.id}" target="_blank" rel="noopener">On the map</a></div>
+      ${d.pre.length ? `<div class="chain">Needs first: ${d.pre.map(x => `<b>${x.name}</b>`).join(', ')}</div>` : '<div class="chain">A starting point: it needs nothing taught before it.</div>'}`);
+  }
+  function paint() { focus(pinned); hulls(); }
+
+  // ---------- layouts
+  const sim = d3.forceSimulation(N.concat(Q)).alphaDecay(0.03).on('tick', tick).on('end', () => fit());
+  let mode = 'web';
+  const cx = () => W() / 2, cy = () => H() / 2 + 20;
+  function layout(m) {
+    mode = m; d3.selectAll('.seg button').classed('on', function () { return this.dataset.l === m; });
+    const ang = d3.scaleLinear().domain([0, decks.length]).range([0, 2 * Math.PI]);
+    const maxD = d3.max(N, d => d._depth), R = Math.min(W(), H()) * 0.42;
+    const link = d3.forceLink(E.concat(QE.filter(e => e.target))).distance(e => e.source.q ? 90 : 46).strength(e => e.source.q ? 0.05 : 0.35);
+    sim.force('link', link).force('charge', d3.forceManyBody().strength(m === 'web' ? -150 : -60))
+       .force('collide', d3.forceCollide(d => d.r + 6));
+    if (m === 'web') {   // lectures pull their concepts together, gently
+      const centre = d => { const a = ang(di[d.deck] ?? 0); return [cx() + Math.cos(a) * R * 0.55, cy() + Math.sin(a) * R * 0.55]; };
+      sim.force('charge', d3.forceManyBody().strength(-70)).force('x', d3.forceX(d => d.q ? cx() : centre(d)[0]).strength(0.2)).force('y', d3.forceY(d => d.q ? cy() : centre(d)[1]).strength(0.2)).force('r', null);
+    } else if (m === 'time') {   // x is when the concept is taught
+      const x = d3.scalePoint().domain(decks.map(d => d.id)).range([140, W() - 140]).padding(0.5);
+      sim.force('charge', d3.forceManyBody().strength(-25)).force('x', d3.forceX(d => d.q ? W() / 2 : x(d.deck)).strength(d => d.q ? 0.02 : 1.2)).force('y', d3.forceY(d => d.q ? 110 : cy()).strength(0.04)).force('r', null);
+    } else {   // radius is depth: basics in the middle, the frontier outside
+      const rr = d => d.q ? R * 1.08 : 40 + (R - 40) * d._depth / maxD;
+      sim.force('r', d3.forceRadial(rr, cx(), cy()).strength(0.9))
+         .force('x', d3.forceX(d => d.q ? cx() : cx() + Math.cos(ang(di[d.deck] + 0.5)) * rr(d)).strength(0.08))
+         .force('y', d3.forceY(d => d.q ? cy() : cy() + Math.sin(ang(di[d.deck] + 0.5)) * rr(d)).strength(0.08));
+    }
+    axes(m, maxD, R); sim.alpha(1).restart();
+  }
+  function axes(m, maxD, R) {
+    axisG.selectAll('*').remove();
+    if (m === 'time') {
+      const x = d3.scalePoint().domain(decks.map(d => d.id)).range([140, W() - 140]).padding(0.5);
+      decks.forEach(d => axisG.append('text').attr('class', 'tl').attr('x', x(d.id)).attr('y', H() - 40).attr('text-anchor', 'middle').attr('font-weight', 600).attr('fill', col(d.id)).text(d.title.split(':')[0].slice(0, 26)));
+    }
+    if (m === 'depth') d3.range(0, maxD + 1).forEach(k => { const r = 40 + (R - 40) * k / maxD;
+      axisG.append('circle').attr('class', 'ring').attr('cx', cx()).attr('cy', cy()).attr('r', r);
+      axisG.append('text').attr('x', cx() + 4).attr('y', cy() - r - 4).text(k === 0 ? 'starting points' : `${k} step${k > 1 ? 's' : ''} in`); });
+  }
+  const hullLine = d3.line().curve(d3.curveCatmullRomClosed.alpha(0.6));
+  function hulls() {
+    const data = mode === 'web' ? decks.filter(d => !off.has(d.id)).map(d => {
+      const ns = N.filter(n => n.deck === d.id), mx = d3.mean(ns, n => n.x), my = d3.mean(ns, n => n.y);
+      const core = ns.sort((a, b) => Math.hypot(a.x - mx, a.y - my) - Math.hypot(b.x - mx, b.y - my)).slice(0, Math.max(3, Math.ceil(ns.length * 0.8)));
+      const pts = core.flatMap(n => [[n.x - 16, n.y - 16], [n.x + 16, n.y - 16], [n.x - 16, n.y + 16], [n.x + 16, n.y + 16]]);
+      return { d, h: pts.length >= 3 ? d3.polygonHull(pts) : null }; }).filter(o => o.h) : [];
+    hullG.selectAll('path').data(data, o => o.d.id).join('path').attr('class', 'hull')
+      .attr('d', o => hullLine(o.h)).attr('fill', o => col(o.d.id)).attr('fill-opacity', 0.07).attr('stroke', o => col(o.d.id)).attr('stroke-opacity', 0.35);
+  }
+  const arc = e => { const s = e.source, t = e.target, dx = t.x - s.x, dy = t.y - s.y, dist = Math.hypot(dx, dy) || 1, k = (t.r || 8) + 3;
+    const tx = t.x - dx / dist * k, ty = t.y - dy / dist * k, bend = mode === 'time' ? 0.25 : 0.12;
+    return `M${s.x},${s.y}Q${(s.x + tx) / 2 - dy * bend},${(s.y + ty) / 2 + dx * bend} ${tx},${ty}`; };
+  function tick() {
+    edge.attr('d', arc); qedge.attr('d', e => e.target ? `M${e.source.x},${e.source.y}L${e.target.x},${e.target.y}` : null);
+    node.attr('transform', d => `translate(${d.x},${d.y})`); qn.attr('transform', d => `translate(${d.x},${d.y})`);
+    hulls();
+  }
+  node.call(d3.drag().on('start', (e, d) => { if (!e.active) sim.alphaTarget(0.2).restart(); d.fx = d.x; d.fy = d.y; })
+    .on('drag', (e, d) => { d.fx = e.x; d.fy = e.y; }).on('end', (e, d) => { if (!e.active) sim.alphaTarget(0); d.fx = d.fy = null; }));
+
+  d3.selectAll('.seg button').on('click', function () { layout(this.dataset.l); });
+  d3.select('#stories').on('change', function () { qG.style('display', this.checked ? null : 'none'); qeG.style('display', this.checked ? null : 'none'); });
+  d3.select('#q').on('input', function () { const t = this.value.trim().toLowerCase();
+    const hit = t && N.find(n => n.name.includes(t) || (n.wiki || '').toLowerCase().includes(t));
+    if (hit) { pinned = hit; focus(hit); panel(hit); } else if (!t) { pinned = null; focus(null); panel(null); } });
+  addEventListener('resize', () => layout(mode));
+  const back = E.filter(e => e.back).length;
+  if (back) d3.select('#note').text(`Hover a concept to trace it back to the basics (gold) and forward to what it unlocks (teal). ${back} prerequisite link${back > 1 ? 's point' : ' points'} backwards in course time (red, clearest in Timeline).`);
+  layout('web');
+})();
+</script>
+</body>
+</html>
