@@ -9,7 +9,7 @@
 <style>
 :root {
   --bg: #fbfaf7; --panel: #ffffff; --ink: #1d1f23; --ink-dim: #5f6570; --rule: #e4e1da;
-  --link: #c9c4ba; --learn: #0f9b83; --accent: #b7791f; --back: #c2410c; --dim: 0.1;
+  --link:#b3ada2; --learn: #0f9b83; --accent: #b7791f; --back: #c2410c; --dim: 0.1;
   --serif: "Source Serif 4", Georgia, serif; --sans: Inter, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
@@ -30,7 +30,7 @@ h1 small { font: 400 13px var(--sans); color: var(--ink-dim); margin-left: 8px; 
 input[type=search] { font: 13px var(--sans); color: var(--ink); background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 6px 10px; width: 200px; }
 label.tg { font-size: 13px; color: var(--ink-dim); display: inline-flex; gap: 6px; align-items: center; }
 svg { display: block; width: 100vw; height: 100vh; cursor: grab; }
-.legend { position: absolute; left: 20px; bottom: 18px; margin: 0; padding: 10px 12px; list-style: none; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--rule); border-radius: 10px; width: 300px; max-height: 42vh; overflow-y: auto; z-index: 2; }
+.legend { position: absolute; left: 20px; bottom: 18px; margin: 0; padding: 4px 12px 10px; list-style: none; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--rule); border-radius: 10px; width: 300px; max-height: 42vh; overflow-y: auto; z-index: 2; }
 .legend li { display: flex; gap: 8px; align-items: center; padding: 2px 4px; border-radius: 6px; cursor: pointer; font-size: 12px; }
 .legend li:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
 .legend li.off { opacity: 0.35; }
@@ -38,6 +38,13 @@ svg { display: block; width: 100vw; height: 100vh; cursor: grab; }
 .legend .n { color: var(--ink-dim); margin-left: auto; font-variant-numeric: tabular-nums; }
 .legend .cap { font-size: 11px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 4px 4px; cursor: default; }
 .legend .cap:hover { background: none; }
+.legend .top { position: sticky; top: 0; display: flex; justify-content: flex-end; padding: 4px 0 0; cursor: default; background: none; }
+.legend .top:hover { background: none; }
+.x { font: 500 12px var(--sans); color: var(--ink-dim); background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 2px 8px; cursor: pointer; }
+.x:hover { color: var(--ink); }
+#legtab { position: absolute; left: 20px; bottom: 18px; z-index: 2; display: none; }
+#legtab.on { display: block; }
+.legend.closed { display: none; }
 aside { position: absolute; right: 18px; top: 64px; width: 320px; background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; z-index: 2; display: none; box-shadow: 0 8px 30px rgba(0,0,0,0.14); }
 aside.on { display: block; }
 aside h2 { font: 600 19px var(--serif); margin: 0 0 2px; }
@@ -53,7 +60,7 @@ aside .chain { font-size: 12.5px; color: var(--ink-dim); margin-top: 10px; }
 aside .chain b { color: var(--ink); font-weight: 500; }
 .note { position: absolute; right: 20px; bottom: 18px; font-size: 12px; color: var(--ink-dim); max-width: 400px; text-align: right; z-index: 2; }
 .hull { stroke-width: 1.5; stroke-linejoin: round; pointer-events: none; }
-.edge { fill: none; stroke: var(--link); stroke-width: 1; }
+.edge { fill: none; stroke: var(--link); stroke-width: 1.1; }
 .edge.back { stroke: var(--back); stroke-width: 1.6; }
 .edge.up { stroke: var(--accent); stroke-width: 2.2; }
 .edge.down { stroke: var(--learn); stroke-width: 2.2; }
@@ -61,8 +68,8 @@ aside .chain b { color: var(--ink); font-weight: 500; }
 .node { cursor: pointer; }
 .node rect { stroke-width: 1.3; }
 .node text { font: 500 12px var(--sans); fill: var(--ink); pointer-events: none; dominant-baseline: central; }
+.lbl { transform: scale(var(--s, 1)); }
 .node.big text { font-weight: 600; font-size: 13px; }
-.node.dot text { display: none; }
 .node.pin rect, .node:hover rect { stroke-width: 2.4; }
 .q { cursor: pointer; }
 .q rect { fill: var(--accent); }
@@ -87,8 +94,9 @@ aside .chain b { color: var(--ink); font-weight: 500; }
 </header>
 <svg id="map" role="img" aria-label="Graph of course concepts and their prerequisites"></svg>
 <ul class="legend" id="legend"></ul>
+<button class="x" id="legtab" aria-label="Show the lectures">Lectures</button>
 <aside id="panel" aria-live="polite"></aside>
-<p class="note" id="note">Zoom in to see every concept; zoomed out, the most connected ones carry the labels. Hover a concept to trace it back to the basics (gold) and forward to what it unlocks (teal); click to pin it.</p>
+<p class="note" id="note">Every concept is on the map: zoom and drag to read it. Hover a concept to trace it back to the basics (gold) and forward to what it unlocks (teal); click to pin it.</p>
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script>
 (async function () {
@@ -121,7 +129,7 @@ aside .chain b { color: var(--ink); font-weight: 500; }
     .append('path').attr('d', 'M0,-4L8,0L0,4').attr('fill', d => css({ link: '--link', back: '--back', up: '--accent', down: '--learn' }[d]));
   const tint = c => d3.interpolateRgb(css('--bg'), c)(dark ? 0.24 : 0.16);
   const node = nodeG.selectAll('g').data(N).join('g').attr('class', d => 'node' + (d.deg >= 6 ? ' big' : ''));
-  node.append('rect'); node.append('text').attr('text-anchor', 'middle').text(d => d.name);
+  const lbl = node.append('g').attr('class', 'lbl'); lbl.append('rect'); lbl.append('text').attr('text-anchor', 'middle').text(d => d.name);
   node.each(function (d) { d.w = this.querySelector('text').getComputedTextLength() + 18; d.h = d.deg >= 6 ? 26 : 22; })
     .select('rect').attr('fill', d => tint(col(d.deck))).attr('stroke', d => col(d.deck));
   const qn = qG.selectAll('g').data(Q).join('g').attr('class', 'q').on('click', (e, d) => open(d.url, '_blank'));
@@ -130,36 +138,37 @@ aside .chain b { color: var(--ink); font-weight: 500; }
     .attr('x', d => -d.w / 2).attr('y', d => -d.h / 2).attr('width', d => d.w).attr('height', d => d.h).attr('rx', 8);
 
   // ---------- layouts: computed once, offline (bake.py writes layout.json); the page never simulates
+  const GROW = 1.9;   // labels may grow to this many times their size when zoomed out; the layout leaves room for it
   function rectCollide(pad, vertical) {
     let nodes;
     const force = () => { for (let pass = 0; pass < 2; pass++) {
       const qt = d3.quadtree(nodes, d => d.x, d => d.y), mw = d3.max(nodes, d => d.w), mh = d3.max(nodes, d => d.h);
       for (const a of nodes) qt.visit((q, x0, y0, x1, y1) => {
         const b = q.data;
-        if (b && b !== a) { const dx = b.x - a.x, dy = b.y - a.y, ox = (a.w + b.w) / 2 + pad - Math.abs(dx), oy = (a.h + b.h) / 2 + pad - Math.abs(dy);
+        if (b && b !== a) { const dx = b.x - a.x, dy = b.y - a.y, ox = (a.w + b.w) * GROW / 2 + pad - Math.abs(dx), oy = (a.h + b.h) * GROW / 2 + pad - Math.abs(dy);
           if (ox > 0 && oy > 0) { if (!vertical && ox / (a.w + b.w) < oy / (a.h + b.h)) { const m = (dx < 0 ? -1 : 1) * ox / 2; a.x -= m; b.x += m; } else { const m = (dy < 0 ? -1 : 1) * (oy / 2 + 0.01); a.y -= m; b.y += m; } } }
-        return x0 > a.x + (a.w + mw) / 2 + pad || x1 < a.x - (a.w + mw) / 2 - pad || y0 > a.y + (a.h + mh) / 2 + pad || y1 < a.y - (a.h + mh) / 2 - pad; });
+        return x0 > a.x + (a.w + mw) * GROW / 2 + pad || x1 < a.x - (a.w + mw) * GROW / 2 - pad || y0 > a.y + (a.h + mh) * GROW / 2 + pad || y1 < a.y - (a.h + mh) * GROW / 2 - pad; });
     } };
     force.initialize = ns => { nodes = ns; }; return force;
   }
-  const SPAN = Math.sqrt(N.length) * 120;   // the canvas grows with the number of concepts
+  const SPAN = Math.sqrt(N.length) * 200;   // the canvas grows with the number of concepts
   function compute(mode) {
     if (mode === 'web') {   // first the lectures, as a graph weighted by the links between them
       const w = {}; E.forEach(e => { const a = e.source.deck, b = e.target.deck; if (a !== b) { const k = a < b ? a + '|' + b : b + '|' + a; w[k] = (w[k] || 0) + 1; } });
-      const DN = decks.map(d => ({ id: d.id, n: N.filter(x => x.deck === d.id).length, x: (d.course === 'intro_ml' ? -1 : 1) * SPAN * 0.4 + (Math.random() - 0.5) * 50, y: (Math.random() - 0.5) * SPAN * 0.4 }));
+      const DN = decks.map(d => ({ id: d.id, n: N.filter(x => x.deck === d.id).length, x: (d.course === 'intro_ml' ? -1 : 1) * SPAN * 0.7 + (Math.random() - 0.5) * 50, y: (Math.random() - 0.5) * SPAN * 0.4 }));
       const dm = new Map(DN.map(d => [d.id, d])), DL = Object.entries(w).map(([k, v]) => ({ source: dm.get(k.split('|')[0]), target: dm.get(k.split('|')[1]), w: v }));
-      d3.forceSimulation(DN).stop().force('link', d3.forceLink(DL).distance(d => 420 / Math.sqrt(d.w)).strength(d => Math.min(1, d.w / 12)))
-        .force('charge', d3.forceManyBody().strength(d => -1800 - 260 * d.n)).force('collide', d3.forceCollide(d => 60 + 22 * Math.sqrt(d.n)))
-        .force('x', d3.forceX(0).strength(0.06)).force('y', d3.forceY(0).strength(0.08)).tick(600);
+      d3.forceSimulation(DN).stop().force('link', d3.forceLink(DL).distance(d => 900 / Math.sqrt(d.w)).strength(d => Math.min(1, d.w / 12)))
+        .force('charge', d3.forceManyBody().strength(d => -5000 - 900 * d.n)).force('collide', d3.forceCollide(d => 120 + 60 * Math.sqrt(d.n)))
+        .force('x', d3.forceX(0).strength(0.025)).force('y', d3.forceY(0).strength(0.16)).tick(600);   // wider than tall, like the screen
       const centre = d => dm.get(d.deck);
       ALL.forEach(d => { const c = d.q ? { x: 0, y: -SPAN * 0.6 } : centre(d); d.x = c.x + (Math.random() - 0.5) * 60; d.y = c.y + (Math.random() - 0.5) * 60; });
       d3.forceSimulation(ALL).stop()
-        .force('link', d3.forceLink(E.concat(QE)).distance(60).strength(0.02))
-        .force('charge', d3.forceManyBody().strength(-40).distanceMax(400))
-        .force('x', d3.forceX(d => d.q ? 0 : centre(d).x).strength(0.12)).force('y', d3.forceY(d => d.q ? -SPAN * 0.6 : centre(d).y).strength(0.12))
-        .force('collide', rectCollide(6, false)).tick(500);
+        .force('link', d3.forceLink(E.concat(QE)).distance(140).strength(0.02))
+        .force('charge', d3.forceManyBody().strength(-120).distanceMax(600))
+        .force('x', d3.forceX(d => d.q ? 0 : centre(d).x).strength(0.08)).force('y', d3.forceY(d => d.q ? -SPAN * 0.6 : centre(d).y).strength(0.08))
+        .force('collide', rectCollide(8, false)).tick(600);
     } else if (mode === 'time') {   // a column per lecture, in course order
-      const x = d3.scalePoint().domain(decks.map(d => d.id)).range([0, decks.length * 230]);
+      const x = d3.scalePoint().domain(decks.map(d => d.id)).range([0, decks.length * 420]);
       ALL.forEach(d => { d.x = d.q ? x.range()[1] / 2 : x(d.deck); d.y = (Math.random() - 0.5) * 300; });
       d3.forceSimulation(ALL).stop().force('link', d3.forceLink(E.concat(QE)).strength(0.01))
         .force('x', d3.forceX(d => d.q ? x.range()[1] / 2 : x(d.deck)).strength(1.5)).force('y', d3.forceY(d => d.q ? -420 : 0).strength(0.04))
@@ -180,35 +189,21 @@ aside .chain b { color: var(--ink); font-weight: 500; }
   const off = new Set();
   const edge = edgeG.selectAll('path').data(E).join('path').attr('class', e => 'edge' + (e.back ? ' back' : '')).attr('marker-end', e => `url(#m-${e.back ? 'back' : 'link'})`);
   const qedge = qeG.selectAll('path').data(QE).join('path').attr('class', 'qedge');
-  const box = d => d.dot ? [12 / k, 12 / k] : [d.w * (d.s || 1), d.h * (d.s || 1)];
+  let S = 1; const box = d => [d.w * S, d.h * S];
   const edgeOf = (t, dx, dy) => { const [w, h] = box(t), s = Math.min((w / 2 + 3) / Math.abs(dx || 1e-9), (h / 2 + 3) / Math.abs(dy || 1e-9)); return [t.x - dx * s, t.y - dy * s]; };
   const arc = e => { const s = e.source, t = e.target, dx = t.x - s.x, dy = t.y - s.y, [tx, ty] = edgeOf(t, dx, dy), b = mode === 'time' ? 0.2 : 0.1;
     return `M${s.x},${s.y}Q${(s.x + tx) / 2 - dy * b},${(s.y + ty) / 2 + dx * b} ${tx},${ty}`; };
-  function shape() {   // a pill with its name, or a dot when the label does not make the cut
-    node.select('rect').attr('x', d => -box(d)[0] / 2 / (d.s || 1)).attr('y', d => -box(d)[1] / 2 / (d.s || 1)).attr('width', d => box(d)[0] / (d.s || 1)).attr('height', d => box(d)[1] / (d.s || 1)).attr('rx', d => box(d)[1] / 2 / (d.s || 1));
-  }
+  node.select('rect').attr('x', d => -d.w / 2).attr('y', d => -d.h / 2).attr('width', d => d.w).attr('height', d => d.h).attr('rx', d => d.h / 2);
   function draw() {
-    node.attr('transform', d => `translate(${d.x},${d.y}) scale(${d.s || 1})`); qn.attr('transform', d => `translate(${d.x},${d.y}) scale(${Math.max(1, 1 / k)})`);
+    node.attr('transform', d => `translate(${d.x},${d.y})`); qn.attr('transform', d => `translate(${d.x},${d.y}) scale(${Math.max(1, 1 / k)})`);
     edge.attr('d', arc); qedge.attr('d', e => `M${e.source.x},${e.source.y}L${e.target.x},${e.target.y}`);
     hulls();
   }
-  // ---------- semantic zoom: far away, only the best-connected concepts keep their label
-  function lod() {
-    // zoomed out, fewer labels, each drawn at its normal size on screen (like the labels of a map)
-    if (k >= 1.05) N.forEach(d => { d.dot = false; d.s = 1; });
-    else {   // declutter: most connected first, a label is kept only if it overlaps no kept label on screen
-      const placed = [], pad = 4;
-      const must = d => d === pinned || d === hovered, first = d => must(d) ? 2 : lit.has(d) ? 1 : 0;
-      ranked.slice().sort((a, b) => first(b) - first(a) || a.rank - b.rank).forEach(d => {
-        const w = d.w + pad * 2, h = d.h + pad * 2, x = d.x * k, y = d.y * k;
-        const free = !placed.some(p => Math.abs(p.x - x) < (p.w + w) / 2 && Math.abs(p.y - y) < (p.h + h) / 2);
-        d.dot = !(free || must(d)); d.s = d.dot ? 1 : 1 / k;
-        if (!d.dot) placed.push({ x, y, w, h });
-      });
-    }
-    node.classed('dot', d => d.dot); node.filter(d => !d.dot).raise(); shape(); draw();
-  }
-  const zoom = d3.zoom().scaleExtent([0.06, 3]).on('zoom', e => { root.attr('transform', e.transform); if (Math.abs(e.transform.k - k) > 0.03) { k = e.transform.k; lod(); } });
+  // ---------- zoom: every label stays; zooming out, labels grow (up to GROW, the room the layout leaves) to stay readable
+  const scaleFor = k => Math.min(GROW, Math.max(1, 0.9 / k));
+  function rescale() { S = scaleFor(k); svg.style('--s', S); edge.attr('d', arc); hulls(); }
+  const zoom = d3.zoom().scaleExtent([0.04, 3]).on('zoom', e => { root.attr('transform', e.transform); k = e.transform.k; const s = scaleFor(k); if (Math.abs(s - S) > 0.02) { S = s; svg.style('--s', S); } })
+    .on('end', () => rescale());
   svg.call(zoom).on('dblclick.zoom', null);
   const fit = (dur = 700) => { const pts = ALL.map(d => L[mode][d.id]).filter(Boolean); const x0 = d3.min(pts, p => p[0]) - 80, x1 = d3.max(pts, p => p[0]) + 80, y0 = d3.min(pts, p => p[1]) - 60, y1 = d3.max(pts, p => p[1]) + 60;
     const s = Math.min(1.2, 0.95 * Math.min(W / (x1 - x0), (H - 120) / (y1 - y0)));
@@ -225,7 +220,7 @@ aside .chain b { color: var(--ink); font-weight: 500; }
   }
   function axes() {
     axisG.selectAll('*').remove();
-    if (mode === 'time') { const x = d3.scalePoint().domain(decks.map(d => d.id)).range([0, decks.length * 230]);
+    if (mode === 'time') { const x = d3.scalePoint().domain(decks.map(d => d.id)).range([0, decks.length * 420]);
       decks.forEach(d => { const ys = N.filter(n => n.deck === d.id).map(n => (L.time[n.id] || [0, 0])[1]);
         axisG.append('text').attr('x', x(d.id)).attr('y', (d3.max(ys) || 0) + 48).attr('text-anchor', 'middle').attr('fill', col(d.id)).text(d.title.split(':')[0].slice(0, 24)); }); }
     if (mode === 'depth') { const maxD = d3.max(N, d => d._depth), R = SPAN * 0.9;
@@ -246,14 +241,14 @@ aside .chain b { color: var(--ink); font-weight: 500; }
   function focus(d) {
     hullDeck = d ? d.deck : null;
     if (!d) { lit = new Set(); node.classed('faded', n => off.has(n.deck)); edge.classed('faded', e => off.has(e.source.deck) || off.has(e.target.deck)).classed('up', false).classed('down', false)
-      .attr('marker-end', e => `url(#m-${e.back ? 'back' : 'link'})`); qn.classed('faded', false); qedge.classed('faded', false); lod(); hulls(); return; }
+      .attr('marker-end', e => `url(#m-${e.back ? 'back' : 'link'})`); qn.classed('faded', false); qedge.classed('faded', false); hulls(); return; }
     const up = walk(d, 'pre'), down = walk(d, 'post'); lit = new Set([d, ...up, ...down]);
     node.classed('faded', n => !lit.has(n));
     edge.classed('up', e => up.has(e.source) && (e.target === d || up.has(e.target))).classed('down', e => (e.source === d || down.has(e.source)) && down.has(e.target))
       .classed('faded', e => !(lit.has(e.source) && lit.has(e.target)))
       .attr('marker-end', function (e) { return `url(#m-${this.classList.contains('up') ? 'up' : this.classList.contains('down') ? 'down' : e.back ? 'back' : 'link'})`; });
     qn.classed('faded', q => !q.teaches.some(c => lit.has(byId.get(c)))); qedge.classed('faded', e => !lit.has(e.target));
-    lod(); hulls();
+    hulls();
   }
   function panel(d) {
     const p = d3.select('#panel').classed('on', !!d); if (!d) return;
@@ -274,7 +269,12 @@ aside .chain b { color: var(--ink); font-weight: 500; }
   node.call(d3.drag().on('drag', (e, d) => { d.x = e.x; d.y = e.y; draw(); }));   // one box moves; the rest stay put
 
   // ---------- legend: hover a lecture to see its area, click to hide it
-  const leg = d3.select('#legend'), courseTitle = { intro_ml: 'Introduction to Machine Learning', ml4science: 'ML for Science' };
+  const leg = d3.select('#legend'), tab = d3.select('#legtab');
+  const legOpen = v => { leg.classed('closed', !v); tab.classed('on', !v); try { localStorage.setItem('cmap-legend', v ? '1' : '0'); } catch (e) {} };
+  leg.append('li').attr('class', 'top').append('button').attr('class', 'x').attr('aria-label', 'Hide the lectures').text('Hide').on('click', () => legOpen(false));
+  tab.on('click', () => legOpen(true));
+  try { if (localStorage.getItem('cmap-legend') === '0') legOpen(false); } catch (e) {}
+  const courseTitle = { intro_ml: 'Introduction to Machine Learning', ml4science: 'ML for Science' };
   Object.keys(inCourse).forEach(c => {
     leg.append('li').attr('class', 'cap').text(courseTitle[c] || c);
     inCourse[c].forEach(id => { const d = decks[di[id]];
@@ -290,7 +290,7 @@ aside .chain b { color: var(--ink); font-weight: 500; }
     else if (!t) { pinned = null; node.classed('pin', false); focus(null); panel(null); } });
   addEventListener('resize', () => fit(0));
   ALL.forEach(d => { [d.x, d.y] = L.web[d.id] || [0, 0]; });
-  layout('web', 0); lod();
+  layout('web', 0); rescale();
 })();
 </script>
 </body>
