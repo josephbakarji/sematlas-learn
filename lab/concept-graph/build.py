@@ -22,6 +22,8 @@ except Exception as e:
 decks_used = [d for d in g['order'] if any(c['deck'] == d for c in g['concepts'].values())]
 deck = {d: {'id': d, 'title': g['titles'].get(d, d), 'i': i, 'course': next(c['course'] for c in g['concepts'].values() if c['deck'] == d)}
         for i, d in enumerate(decks_used)}
+import yaml
+defs = yaml.safe_load((LS / 'data' / 'concept_definitions.yaml').read_text()) if (LS / 'data' / 'concept_definitions.yaml').exists() else {}
 nodes = []
 for k, c in g['concepts'].items():
     b = bridge.get(k, {})
@@ -29,7 +31,7 @@ for k, c in g['concepts'].items():
                   'url': 'https://learn.sematlas.com' + c['url'], 'course': c['course'],
                   'uses': len(c['used_on']) + len(c['previewed_on']),
                   'quizzes': len(c['resources']['quizzes']), 'limits': len(c['resources']['limits']),
-                  'wiki': b.get('wiki')})
+                  'wiki': b.get('wiki'), 'label': defs.get(k, {}).get('title'), 'definition': defs.get(k, {}).get('definition', '')})
 edges = [{'source': a, 'target': b} for a, b in g['edges']]
 stories = json.load(open(HERE.parent.parent / 'decks.json'))['decks']
 keys = {n['id'] for n in nodes}
