@@ -152,6 +152,12 @@ aside .chain b { color: var(--ink); font-weight: 500; }
     force.initialize = ns => { nodes = ns; }; return force;
   }
   const SPAN = Math.sqrt(N.length) * 200;   // the canvas grows with the number of concepts
+  function rings() {   // r_j^2 = r_{j-1}^2 + 1.6 * (area of the labels at depth j) / pi; labels sit at each band's mid radius
+    const maxD = d3.max(N, d => d._depth), mid = [], edge = [0]; let r2 = 0;
+    for (let j = 0; j <= maxD; j++) { const area = d3.sum(N.filter(d => d._depth === j), d => (GROW * d.w + 8) * (GROW * d.h + 8));
+      const n2 = r2 + 1.6 * area / Math.PI; mid.push(Math.sqrt((r2 + n2) / 2)); r2 = n2; edge.push(Math.sqrt(r2)); }
+    return { mid, out: Math.sqrt(r2) };
+  }
   function compute(mode) {
     if (mode === 'web') {   // first the lectures, as a graph weighted by the links between them
       const w = {}; E.forEach(e => { const a = e.source.deck, b = e.target.deck; if (a !== b) { const k = a < b ? a + '|' + b : b + '|' + a; w[k] = (w[k] || 0) + 1; } });
@@ -173,11 +179,11 @@ aside .chain b { color: var(--ink); font-weight: 500; }
       d3.forceSimulation(ALL).stop().force('link', d3.forceLink(E.concat(QE)).strength(0.01))
         .force('x', d3.forceX(d => d.q ? x.range()[1] / 2 : x(d.deck)).strength(1.5)).force('y', d3.forceY(d => d.q ? -420 : 0).strength(0.04))
         .force('collide', rectCollide(4, true)).tick(400);
-    } else {   // rings of prerequisite depth, each lecture in its own sector
-      const maxD = d3.max(N, d => d._depth), R = SPAN * 0.9, ang = d3.scaleLinear().domain([0, decks.length]).range([0, 2 * Math.PI]);
-      const rr = d => d.q ? R * 1.12 : 80 + (R - 80) * d._depth / maxD;
+    } else {   // rings of prerequisite depth, each band sized by the area its labels need
+      const R = rings(), ang = d3.scaleLinear().domain([0, decks.length]).range([0, 2 * Math.PI]);
+      const rr = d => d.q ? R.out * 1.08 : R.mid[d._depth];
       ALL.forEach(d => { const a = d.q ? -Math.PI / 2 : ang(di[d.deck] + 0.5); d.x = Math.cos(a) * rr(d); d.y = Math.sin(a) * rr(d); });
-      d3.forceSimulation(ALL).stop().force('r', d3.forceRadial(rr, 0, 0).strength(0.8)).force('collide', rectCollide(5, false)).tick(400);
+      d3.forceSimulation(ALL).stop().force('r', d3.forceRadial(rr, 0, 0).strength(0.35)).force('collide', rectCollide(5, false)).tick(500);
     }
     return Object.fromEntries(ALL.map(d => [d.id, [Math.round(d.x), Math.round(d.y)]]));
   }
@@ -195,13 +201,13 @@ aside .chain b { color: var(--ink); font-weight: 500; }
     return `M${s.x},${s.y}Q${(s.x + tx) / 2 - dy * b},${(s.y + ty) / 2 + dx * b} ${tx},${ty}`; };
   node.select('rect').attr('x', d => -d.w / 2).attr('y', d => -d.h / 2).attr('width', d => d.w).attr('height', d => d.h).attr('rx', d => d.h / 2);
   function draw() {
-    node.attr('transform', d => `translate(${d.x},${d.y})`); qn.attr('transform', d => `translate(${d.x},${d.y}) scale(${Math.max(1, 1 / k)})`);
+    node.attr('transform', d => `translate(${d.x},${d.y})`); qn.attr('transform', d => `translate(${d.x},${d.y}) scale(${S})`);
     edge.attr('d', arc); qedge.attr('d', e => `M${e.source.x},${e.source.y}L${e.target.x},${e.target.y}`);
     hulls();
   }
   // ---------- zoom: every label stays; zooming out, labels grow (up to GROW, the room the layout leaves) to stay readable
   const scaleFor = k => Math.min(GROW, Math.max(1, 0.9 / k));
-  function rescale() { S = scaleFor(k); svg.style('--s', S); edge.attr('d', arc); hulls(); }
+  function rescale() { S = scaleFor(k); svg.style('--s', S); draw(); }
   const zoom = d3.zoom().scaleExtent([0.04, 3]).on('zoom', e => { root.attr('transform', e.transform); k = e.transform.k; const s = scaleFor(k); if (Math.abs(s - S) > 0.02) { S = s; svg.style('--s', S); } })
     .on('end', () => rescale());
   svg.call(zoom).on('dblclick.zoom', null);
@@ -223,8 +229,8 @@ aside .chain b { color: var(--ink); font-weight: 500; }
     if (mode === 'time') { const x = d3.scalePoint().domain(decks.map(d => d.id)).range([0, decks.length * 420]);
       decks.forEach(d => { const ys = N.filter(n => n.deck === d.id).map(n => (L.time[n.id] || [0, 0])[1]);
         axisG.append('text').attr('x', x(d.id)).attr('y', (d3.max(ys) || 0) + 48).attr('text-anchor', 'middle').attr('fill', col(d.id)).text(d.title.split(':')[0].slice(0, 24)); }); }
-    if (mode === 'depth') { const maxD = d3.max(N, d => d._depth), R = SPAN * 0.9;
-      d3.range(0, maxD + 1).forEach(j => { const r = 80 + (R - 80) * j / maxD; axisG.append('circle').attr('class', 'ring').attr('r', r);
+    if (mode === 'depth') { const R = rings();
+      R.mid.forEach((r, j) => { axisG.append('circle').attr('class', 'ring').attr('r', r);
         axisG.append('text').attr('x', 6).attr('y', -r - 6).text(j === 0 ? 'starting points' : `${j} step${j > 1 ? 's' : ''} in`); }); }
   }
   // a lecture's area: only for the lecture in focus, so the map stays legible
